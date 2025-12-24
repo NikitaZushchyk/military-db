@@ -1,0 +1,60 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        user: laravel
+        uid: 1000
+    image: military-db-app
+    container_name: military_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./src:/var/www
+    networks:
+      - military-net
+
+  web:
+    image: nginx:alpine
+    container_name: military_web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - app
+    networks:
+      - military-net
+
+  db:
+    image: mysql:8.0
+    container_name: military_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: military_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: password
+      MYSQL_USER: laravel
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - military-net
+
+  redis:
+    image: redis:alpine
+    container_name: military_redis
+    restart: unless-stopped
+    networks:
+      - military-net
+
+networks:
+  military-net:
+    driver: bridge
+
+volumes:
+  dbdata:
