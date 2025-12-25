@@ -44,11 +44,14 @@ services:
       - dbdata:/var/lib/mysql
     networks:
       - military-net
+    command: --default-authentication-plugin=mysql_native_password --log-bin-trust-function-creators=1
 
   redis:
     image: redis:alpine
     container_name: military_redis
     restart: unless-stopped
+    ports:
+      - "6379:6379"
     networks:
       - military-net
 
