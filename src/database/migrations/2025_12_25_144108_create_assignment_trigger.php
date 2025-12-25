@@ -32,15 +32,12 @@ return new  class extends Migration {
             AFTER UPDATE ON assignments
             FOR EACH ROW
             BEGIN
-                -- Перевіряємо: якщо раніше дати не було (NULL), а тепер вона Є (NOT NULL)
                 IF OLD.return_date IS NULL AND NEW.return_date IS NOT NULL THEN
 
-                    -- Повертаємо статус "На складі"
                     UPDATE warehouses
                     SET status = "in_stock"
                     WHERE id = NEW.warehouse_id;
 
-                    -- Пишемо в лог про повернення
                     INSERT INTO logs (action, description, created_at)
                     VALUES (
                         "WEAPON_RETURNED",
