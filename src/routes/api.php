@@ -17,6 +17,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('/{soldier}', [SoldierController::class, 'delete'])->name('soldiers.delete');
         Route::post('/', [SoldierController::class, 'store'])->name('soldiers.store');
     });
+
     Route::prefix('warehouse')->group(function () {
         Route::get('/', [WarehouseController::class, 'index'])->name('warehouses.index');
         Route::post('/', [WarehouseController::class, 'store'])->name('warehouses.store');
