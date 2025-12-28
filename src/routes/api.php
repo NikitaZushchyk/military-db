@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SoldierController;
 use App\Http\Controllers\WarehouseController;
@@ -22,5 +23,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [WarehouseController::class, 'index'])->name('warehouses.index');
         Route::post('/', [WarehouseController::class, 'store'])->name('warehouses.store');
         Route::put('/{warehouse}', [WarehouseController::class, 'update'])->name('warehouses.update');
+    });
+
+    Route::prefix('assignments')->group(function () {
+        Route::post('/issue', [AssignmentController::class, 'issue'])->name('assignments.issue');
+        Route::post('/return', [AssignmentController::class, 'return'])->name('assignments.return');
+        Route::get('/', [AssignmentController::class, 'index'])->name('assignments.index');
+        Route::get('/active', [AssignmentController::class, 'active'])->name('assignments.active');
     });
 });
