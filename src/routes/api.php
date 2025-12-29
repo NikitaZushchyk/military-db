@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\DutyRosterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SoldierController;
 use App\Http\Controllers\WarehouseController;
@@ -31,4 +32,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [AssignmentController::class, 'index'])->name('assignments.index');
         Route::get('/active', [AssignmentController::class, 'active'])->name('assignments.active');
     });
+
+    Route::get('/roster', [DutyRosterController::class, 'index'])->name('roster.index');
+    Route::post('/roster', [DutyRosterController::class, 'store'])->name('roster.store');
 });

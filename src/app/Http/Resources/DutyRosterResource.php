@@ -20,6 +20,7 @@ class DutyRosterResource extends JsonResource
             'end_time' => $this->end_time,
 
             'duty_type' => $this->dutyType->name ?? 'Unknown',
+            'soldier' => $this->soldier ? ($this->soldier->last_name . ' ' . $this->soldier->first_name) : 'Unknown',
         ];
     }
 }
