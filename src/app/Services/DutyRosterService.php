@@ -19,7 +19,9 @@ class DutyRosterService
         });
         return $query->orderBy('start_time', 'desc')->paginate(20);
     }
-    public function store(array $data){
-        return  DutyRoster::create($data)->load('soldier', 'dutyType');
+
+    public function store(array $data)
+    {
+        return DutyRoster::create($data)->load('soldier', 'dutyType');
     }
 }
