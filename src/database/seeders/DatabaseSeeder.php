@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Assignment;
+use App\Models\DutyRoster;
 use App\Models\DutyType;
 use App\Models\EquipmentType;
 use App\Models\Rank;
@@ -10,69 +11,71 @@ use App\Models\Soldier;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\Warehouse;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        $ranks = [
-            'Солдат', 'Старший солдат', 'Молодший сержант', 'Сержант',
-            'Головний сержант', 'Лейтенант', 'Капітан', 'Майор'
-        ];
-        foreach ($ranks as $rank) {
-            Rank::create(['name' => $rank]);
-        }
+        $ranks = ['Солдат', 'Старший солдат', 'Молодший сержант', 'Сержант', 'Головний сержант', 'Лейтенант', 'Капітан', 'Майор'];
+        foreach ($ranks as $rank) Rank::firstOrCreate(['name' => $rank]);
 
         $units = ['1-ша рота', '2-га рота', 'Взвод забезпечення', 'Розвідвзвод', 'Штаб'];
-        foreach ($units as $unit) {
-            Unit::create(['name' => $unit]);
+        foreach ($units as $unit) Unit::firstOrCreate(['name' => $unit]);
+
+        $weaponTypes = ['АК-74', 'ПМ', 'СВД', 'РПГ-7', 'Бронежилет Корсар', 'Шолом', 'Рація Motorola'];
+        foreach ($weaponTypes as $type) EquipmentType::firstOrCreate(['name' => $type]);
+
+        $duties = ['КПП', 'Патруль території', 'Черговий по роті', 'Кухня', 'Варта'];
+        foreach ($duties as $duty) DutyType::firstOrCreate(['name' => $duty]);
+
+        $soldiers = Soldier::factory(50)->create([
+            'rank_id' => fn() => Rank::inRandomOrder()->first()->id,
+            'unit_id' => fn() => Unit::inRandomOrder()->first()->id,
+        ]);
+
+        $items = Warehouse::factory(100)->create([
+            'equipment_type_id' => fn() => EquipmentType::inRandomOrder()->first()->id,
+            'status' => 'in_stock',
+        ]);
+
+        $activeSoldiers = $soldiers->take(30);
+        $activeItems = $items->take(30);
+
+        foreach ($activeSoldiers as $index => $soldier) {
+            $item = $activeItems[$index];
+
+            Assignment::create([
+                'soldier_id' => $soldier->id,
+                'warehouse_id' => $item->id,
+                'issue_date' => now()->subDays(rand(1, 30)),
+            ]);
+            $item->update(['status' => 'issued']);
         }
 
-        $weaponTypes = ['АК-74', 'ПМ', 'СВД', 'РПГ-7', 'Бронежилет Корсар', 'Шолом'];
-        foreach ($weaponTypes as $type) {
-            EquipmentType::create(['name' => $type]);
-        }
-
-        $duties = ['КПП', 'Патруль території', 'Черговий по роті', 'Кухня'];
-        foreach ($duties as $duty) {
-            DutyType::create(['name' => $duty]);
-        }
-
-        Soldier::factory(50)->make()->each(function ($soldier) {
-            $soldier->rank_id = Rank::inRandomOrder()->first()->id;
-            $soldier->unit_id = Unit::inRandomOrder()->first()->id;
-            $soldier->save();
-        });
-
-        Warehouse::factory(100)->make()->each(function ($item) {
-            $item->equipment_type_id = EquipmentType::inRandomOrder()->first()->id;
-            $item->save();
-        });
-
-        $soldiers = Soldier::take(10)->get();
-        $items = Warehouse::where('status', 'in_stock')->take(10)->get();
-
-        foreach ($soldiers as $index => $soldier) {
-            if (isset($items[$index])) {
-                Assignment::create([
+        $dutyTypes = DutyType::all();
+        foreach ($soldiers as $soldier) {
+            if (rand(1, 5) == 1) {
+                $start = now()->addDays(rand(-5, 5))->setHour(rand(8, 20))->setMinute(0);
+                DutyRoster::create([
                     'soldier_id' => $soldier->id,
-                    'warehouse_id' => $items[$index]->id,
-                    'issue_date' => now(),
+                    'duty_type_id' => $dutyTypes->random()->id,
+                    'start_time' => $start,
+                    'end_time' => $start->copy()->addHours(4),
                 ]);
             }
         }
 
         User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@military.com',
+            'password' => bcrypt('password'),
+        ]);
+
+        User::factory()->create([
             'name' => 'Test',
             'email' => 'test@example.com',
-            'password' => 'password',
+            'password' => bcrypt('password'),
         ]);
     }
 }
