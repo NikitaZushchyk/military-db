@@ -3,7 +3,7 @@ import {ref} from 'vue'
 import {useAuthStore} from '../stores/auth'
 
 const auth = useAuthStore()
-const email = ref('admin@military.com') // Вписав, щоб тобі не вводити
+const email = ref('admin@military.com')
 const password = ref('password')
 
 const handleLogin = async () => {
@@ -56,7 +56,7 @@ const handleLogin = async () => {
 .logo {
   font-size: 40px;
   margin-bottom: 20px;
-  border-radius: 10px;
+  border: none;
   background: white;
 }
 

@@ -13,7 +13,7 @@ use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class   DatabaseSeeder extends Seeder
 {
     public function run(): void
     {

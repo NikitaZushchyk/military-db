@@ -1,16 +1,26 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import {RouterLink, RouterView} from 'vue-router'
+import {useAuthStore} from '@/stores/auth'
+import {useRouter} from 'vue-router'
+
+const auth = useAuthStore()
+const router = useRouter()
+
+const handleLogout = () => {
+  auth.logout()
+  router.push('/login')
+}
 </script>
 
 <template>
   <div class="app-container">
-    <aside class="sidebar">
+    <aside class="sidebar" v-if="auth.token">
       <div class="logo">
         🛡️ Military DB
       </div>
 
       <nav class="menu">
-        <RouterLink to="/" class="menu-item">📊 Статистика</RouterLink>
+        <RouterLink to="/" class="menu-item">📊 Дашборд</RouterLink>
         <RouterLink to="/soldiers" class="menu-item">🪖 Особовий склад</RouterLink>
         <RouterLink to="/warehouse" class="menu-item">📦 Склад зброї</RouterLink>
         <RouterLink to="/assignments" class="menu-item">📝 Журнал видач</RouterLink>
@@ -18,19 +28,20 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/logs" class="menu-item">⚠️ Логи</RouterLink>
       </nav>
 
-      <div class="user-info">
-        <p>Користувач: Admin</p>
-        <button class="logout-btn">Вийти</button>
+      <div class="user-info" v-if="auth.user">
+        <p>Користувач: <strong>{{ auth.user.name }}</strong></p>
+
+        <button @click="handleLogout" class="logout-btn">Вийти</button>
       </div>
     </aside>
 
     <main class="content">
-      <header class="top-bar">
+      <header class="top-bar" v-if="auth.token">
         <h2>Система обліку</h2>
       </header>
 
       <div class="page-view">
-        <RouterView />
+        <RouterView/>
       </div>
     </main>
   </div>
@@ -138,7 +149,7 @@ body {
   display: flex;
   align-items: center;
   padding: 0 30px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .page-view {
