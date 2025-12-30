@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
 
 const stats = ref({
   soldier_count: 50,
@@ -75,10 +75,21 @@ h2 {
   transform: translateY(-2px);
 }
 
-.card.blue { border-bottom-color: #3b82f6; }
-.card.green { border-bottom-color: #22c55e; }
-.card.orange { border-bottom-color: #f97316; }
-.card.red { border-bottom-color: #ef4444; }
+.card.blue {
+  border-bottom-color: #3b82f6;
+}
+
+.card.green {
+  border-bottom-color: #22c55e;
+}
+
+.card.orange {
+  border-bottom-color: #f97316;
+}
+
+.card.red {
+  border-bottom-color: #ef4444;
+}
 
 .card h3 {
   font-size: 14px;
