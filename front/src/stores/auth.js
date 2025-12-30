@@ -7,6 +7,10 @@ export const useAuthStore = defineStore('auth', () => {
     const token = ref(localStorage.getItem('token') || null)
     const user = ref(JSON.parse(localStorage.getItem('user')) || null)
 
+    if (token.value) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
+    }
+
     const isAuthenticated = computed(() => !!token.value)
 
     async function login(email, password) {

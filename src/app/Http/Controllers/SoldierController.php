@@ -17,7 +17,7 @@ class SoldierController extends Controller
     public function index(Request $request)
     {
         $soldiers = $this->soldierService->index($request);
-        return SoldierResource::collection($soldiers);
+        return SoldierResource::collection($soldiers['paginator'])->additional(['meta_data' => $soldiers['filters']]);
     }
 
     public function store(SoldierStoreRequest $request)

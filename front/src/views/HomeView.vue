@@ -1,11 +1,31 @@
 <script setup>
-import {ref} from 'vue'
+import {onMounted, ref} from 'vue'
+import axios from 'axios'
 
 const stats = ref({
-  soldier_count: 50,
-  free_weapons_count: 42,
-  issued_weapons_count: 58,
-  in_duty_count: 12
+  soldier_count: 0,
+  free_weapons_count: 0,
+  issued_weapons_count: 0,
+  in_duty_count: 0
+})
+
+const loading = ref(true)
+
+const fetchStats = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/stats')
+
+    stats.value = response.data.data
+  } catch (error) {
+    console.error('Помилка завантаження статистики:', error)
+    alert('Не вдалося оновити дані')
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchStats()
 })
 </script>
 
@@ -13,7 +33,9 @@ const stats = ref({
   <div class="dashboard">
     <h2>Оперативна статистика</h2>
 
-    <div class="stats-grid">
+    <div v-if="loading" class="loading-text">Оновлення даних...</div>
+
+    <div v-else class="stats-grid">
       <div class="card blue">
         <h3>Особовий склад</h3>
         <p class="number">{{ stats.soldier_count }}</p>
@@ -42,6 +64,12 @@ const stats = ref({
 </template>
 
 <style scoped>
+.loading-text {
+  font-size: 18px;
+  color: #64748b;
+  margin-bottom: 20px;
+}
+
 .dashboard {
   padding: 0;
 }

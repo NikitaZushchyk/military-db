@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Rank;
 use App\Models\Soldier;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 
 class SoldierService
@@ -27,7 +29,19 @@ class SoldierService
                     ->orWhere('last_name', 'like', "%{$request->search}%");
             });
         });
-        return $query->orderBy('last_name')->paginate(15);
+
+        $soldiers = $query->orderBy('last_name')->paginate(15);
+
+        $ranks = Rank::select('id', 'name')->get();
+        $units = Unit::select('id', 'name')->get();
+
+        return [
+            'paginator' => $soldiers,
+            'filters' => [
+                'ranks' => $ranks,
+                'units' => $units,
+            ],
+        ];
     }
 
     public function store($data)

@@ -14,6 +14,6 @@ class DashboardController extends Controller
     public function stats()
     {
         $stats = $this->service->stats();
-        return DashboardResource::collection($stats);
+        return new DashboardResource($stats);
     }
 }
