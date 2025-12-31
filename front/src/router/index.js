@@ -2,9 +2,10 @@ import {createRouter, createWebHistory} from 'vue-router'
 import {useAuthStore} from '@/stores/auth'
 import HomeView from '../views/HomeView.vue'
 import LoginView from '../views/LoginView.vue'
-import SoldiersView from '../views/SoldiersView.vue'
-import SoldiersDetailView from '../views/SoldiersDetailView.vue'
-import SoldiersCreateView from "@/views/SoldiersCreateView.vue";
+import SoldiersView from '../views/soldiers/SoldiersView.vue'
+import SoldiersDetailView from '../views/soldiers/SoldiersDetailView.vue'
+import SoldiersCreateView from "@/views/soldiers/SoldiersCreateView.vue";
+import WarehouseIndexView from "@/views/warehouse/WarehouseIndexView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +15,7 @@ const router = createRouter({
         {path: '/soldiers', component: SoldiersView},
         {path: '/soldiers/create', name: 'soldier-create', component: SoldiersCreateView},
         {path: '/soldiers/:id', name: 'soldier-detail', component: SoldiersDetailView},
-        {path: '/warehouse', component: HomeView},
+        {path: '/warehouse', component: WarehouseIndexView},
         {path: '/assignments', component: HomeView},
         {path: '/duty', component: HomeView},
         {path: '/logs', component: HomeView},

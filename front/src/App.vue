@@ -22,7 +22,7 @@ const handleLogout = () => {
       <nav class="menu">
         <RouterLink to="/" class="menu-item">📊 Дашборд</RouterLink>
         <RouterLink to="/soldiers" class="menu-item">🪖 Особовий склад</RouterLink>
-        <RouterLink to="/warehouse" class="menu-item">📦 Склад зброї</RouterLink>
+        <RouterLink to="/warehouse" class="menu-item">📦 Склад майна</RouterLink>
         <RouterLink to="/assignments" class="menu-item">📝 Журнал видач</RouterLink>
         <RouterLink to="/duty" class="menu-item">📅 Наряди</RouterLink>
         <RouterLink to="/logs" class="menu-item">⚠️ Логи</RouterLink>

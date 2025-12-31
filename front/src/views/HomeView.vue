@@ -43,7 +43,7 @@ onMounted(() => {
       </div>
 
       <div class="card green">
-        <h3>Склад зброї</h3>
+        <h3>Склад майна</h3>
         <p class="number">{{ stats.free_weapons_count }}</p>
         <span class="label">Доступно одиниць</span>
       </div>

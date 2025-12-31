@@ -18,7 +18,7 @@ class WarehouseController extends Controller
     public function index(Request $request)
     {
         $warehouses = $this->warehouseService->index($request);
-        return WarehouseResource::collection($warehouses);
+        return WarehouseResource::collection($warehouses['warehouses'])->additional(['meta_data' => $warehouses['filters']]);
     }
 
     public function store(WarehouseStoreRequest $request)
