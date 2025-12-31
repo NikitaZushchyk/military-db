@@ -67,7 +67,7 @@ onMounted(() => fetchSoldiers())
         <h2>🪖 Особовий склад</h2>
         <span class="count-badge" v-if="pagination.total">Всього: {{ pagination.total }}</span>
       </div>
-      <button class="add-btn">+ Додати бійця</button>
+      <button class="add-btn" @click="router.push('/soldiers/create')">+ Додати бійця</button>
     </div>
 
     <div class="filters-bar">
@@ -86,7 +86,7 @@ onMounted(() => fetchSoldiers())
           <option value="active">Active</option>
           <option value="hospital">Hospital</option>
           <option value="vacation">Vacation</option>
-          <option value="retired">Fired</option>
+          <option value="fired">Fired</option>
         </select>
 
         <select v-model="filters.rank_id" @change="applyFilter">

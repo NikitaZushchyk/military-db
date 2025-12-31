@@ -111,7 +111,7 @@ onMounted(() => {
               <option value="active">Active</option>
               <option value="hospital">Hospital</option>
               <option value="vacation">Vacation</option>
-              <option value="retired">Retired</option>
+              <option value="fired">Fired</option>
             </select>
           </div>
 
