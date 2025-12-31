@@ -12,7 +12,6 @@ const loading = ref(true)
 const ranks = ref([])
 const units = ref([])
 
-// Форма редагування
 const form = ref({
   first_name: '',
   last_name: '',
@@ -131,7 +130,7 @@ onMounted(() => {
             <ul class="list">
               <li v-for="assign in soldier.assignments" :key="assign.id">
                 <strong>{{ assign.item?.name || 'Предмет' }}</strong>
-                <span class="date">{{ assign.issue_date }}</span>
+                <span class="date">— {{ assign.issue_date }}</span>
                 <span v-if="assign.return_date" class="returned"> (Повернуто)</span>
               </li>
             </ul>

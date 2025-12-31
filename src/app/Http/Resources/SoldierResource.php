@@ -24,6 +24,9 @@ class SoldierResource extends JsonResource
             'rank' => $this->rank ? $this->rank->name : null,
             'unit' => $this->unit ? $this->unit->name : null,
 
+            'rank_id' => $this->rank_id,
+            'unit_id' => $this->unit_id,
+
             'assignments' => AssignmentResource::collection($this->whenLoaded('assignments')),
 
             'duties' => DutyRosterResource::collection($this->whenLoaded('duties')),
