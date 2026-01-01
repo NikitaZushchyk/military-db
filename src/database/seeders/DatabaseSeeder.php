@@ -12,6 +12,7 @@ use App\Models\Unit;
 use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 class   DatabaseSeeder extends Seeder
 {
@@ -29,18 +30,32 @@ class   DatabaseSeeder extends Seeder
         $duties = ['КПП', 'Патруль території', 'Черговий по роті', 'Кухня', 'Варта'];
         foreach ($duties as $duty) DutyType::firstOrCreate(['name' => $duty]);
 
-        $soldiers = Soldier::factory(50)->create([
-            'rank_id' => fn() => Rank::inRandomOrder()->first()->id,
-            'unit_id' => fn() => Unit::inRandomOrder()->first()->id,
-        ]);
+        $soldiers = Soldier::factory(50)
+            ->state(new Sequence(
+                ['status' => 'active'],
+                ['status' => 'active'],
+                ['status' => 'hospital'],
+                ['status' => 'vacation'],
+                ['status' => 'fired'],
+            ))
+            ->create([
+                'rank_id' => fn() => Rank::inRandomOrder()->first()->id,
+                'unit_id' => fn() => Unit::inRandomOrder()->first()->id,
+            ]);
 
-        $items = Warehouse::factory(100)->create([
-            'equipment_type_id' => fn() => EquipmentType::inRandomOrder()->first()->id,
-            'status' => 'in_stock',
-        ]);
+        $items = Warehouse::factory(100)
+            ->state(new Sequence(
+                ['status' => 'in_stock'],
+                ['status' => 'in_stock'],
+                ['status' => 'issued'],
+                ['status' => 'broken'],
+            ))
+            ->create([
+                'equipment_type_id' => fn() => EquipmentType::inRandomOrder()->first()->id,
+            ]);
 
-        $activeSoldiers = $soldiers->take(30);
-        $activeItems = $items->take(30);
+        $activeSoldiers = $soldiers->where('status', 'active')->take(30)->values();
+        $activeItems = $items->where('status', 'in_stock')->take(30)->values();
 
         foreach ($activeSoldiers as $index => $soldier) {
             $item = $activeItems[$index];
@@ -54,7 +69,7 @@ class   DatabaseSeeder extends Seeder
         }
 
         $dutyTypes = DutyType::all();
-        foreach ($soldiers as $soldier) {
+        foreach ($soldiers->where('status', 'active') as $soldier) {
             if (rand(1, 5) == 1) {
                 $start = now()->addDays(rand(-5, 5))->setHour(rand(8, 20))->setMinute(0);
                 DutyRoster::create([

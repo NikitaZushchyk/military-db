@@ -108,10 +108,10 @@ onMounted(() => {
           <div class="form-group">
             <label>Статус</label>
             <select v-model="form.status">
-              <option value="active">Active</option>
-              <option value="hospital">Hospital</option>
-              <option value="vacation">Vacation</option>
-              <option value="fired">Fired</option>
+              <option value="active">В строю 🟢</option>
+              <option value="hospital">Шпиталь 🏥</option>
+              <option value="vacation">Відпустка 🏖</option>
+              <option value="fired">Звільнений ❌</option>
             </select>
           </div>
 

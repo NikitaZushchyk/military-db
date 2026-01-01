@@ -57,6 +57,26 @@ const changePage = (link) => {
   fetchSoldiers(url.searchParams.get('page'));
 }
 
+const getSoldierStatusLabel = (status) => {
+  const map = {
+    'active': 'В строю',
+    'hospital': 'Шпиталь',
+    'vacation': 'Відпустка',
+    'fired': 'Звільнений'
+  }
+  return map[status] || status
+}
+
+const getSoldierStatusClass = (status) => {
+  const map = {
+    'active': 'active',
+    'hospital': 'warning',
+    'vacation': 'info',
+    'fired': 'danger'
+  }
+  return map[status] || 'inactive'
+}
+
 onMounted(() => fetchSoldiers())
 </script>
 
@@ -83,10 +103,10 @@ onMounted(() => fetchSoldiers())
       <div class="filter-group">
         <select v-model="filters.status" @change="applyFilter">
           <option value="">Всі статуси</option>
-          <option value="active">Active</option>
-          <option value="hospital">Hospital</option>
-          <option value="vacation">Vacation</option>
-          <option value="fired">Fired</option>
+          <option value="active">В строю 🟢</option>
+          <option value="hospital">Шпиталь 🏥</option>
+          <option value="vacation">Відпустка 🏖</option>
+          <option value="fired">Звільнений ❌</option>
         </select>
 
         <select v-model="filters.rank_id" @change="applyFilter">
@@ -127,8 +147,8 @@ onMounted(() => fetchSoldiers())
           <td><span class="badge rank">{{ soldier.rank }}</span></td>
           <td>{{ soldier.unit }}</td>
           <td>
-            <span :class="['status-dot', soldier.status === 'active' ? 'active' : 'inactive']"></span>
-            {{ soldier.status }}
+            <span :class="['status-dot', getSoldierStatusClass(soldier.status)]"></span>
+            {{ getSoldierStatusLabel(soldier.status) }}
           </td>
         </tr>
         </tbody>
@@ -337,8 +357,19 @@ td {
   box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
 }
 
-.status-dot.inactive {
-  background: #94a3b8;
+.status-dot.warning {
+  background: #f59e0b;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.status-dot.info {
+  background: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.status-dot.danger {
+  background: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
 }
 
 .pagination-container {
