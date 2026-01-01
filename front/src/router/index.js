@@ -6,6 +6,7 @@ import SoldiersView from '../views/soldiers/SoldiersView.vue'
 import SoldiersDetailView from '../views/soldiers/SoldiersDetailView.vue'
 import SoldiersCreateView from "@/views/soldiers/SoldiersCreateView.vue";
 import WarehouseIndexView from "@/views/warehouse/WarehouseIndexView.vue";
+import WarehouseCreateView from "@/views/warehouse/WarehouseCreateView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,7 +16,8 @@ const router = createRouter({
         {path: '/soldiers', component: SoldiersView},
         {path: '/soldiers/create', name: 'soldier-create', component: SoldiersCreateView},
         {path: '/soldiers/:id', name: 'soldier-detail', component: SoldiersDetailView},
-        {path: '/warehouse', component: WarehouseIndexView},
+        {path: '/warehouse', name: 'warehouses.index', component: WarehouseIndexView},
+        {path: '/warehouse/create', name: 'warehouse-create', component: WarehouseCreateView},
         {path: '/assignments', component: HomeView},
         {path: '/duty', component: HomeView},
         {path: '/logs', component: HomeView},

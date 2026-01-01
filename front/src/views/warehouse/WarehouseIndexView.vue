@@ -61,8 +61,7 @@ const getStatusLabel = (status) => {
   const map = {
     'in_stock': 'На складі',
     'issued': 'Видано',
-    'maintenance': 'Ремонт',
-    'lost': 'Втрачено'
+    'broken': 'Ремонт',
   }
   return map[status] || status
 }
@@ -71,8 +70,7 @@ const getStatusClass = (status) => {
   const map = {
     'in_stock': 'active',
     'issued': 'info',
-    'maintenance': 'warning',
-    'lost': 'danger'
+    'broken': 'warning',
   }
   return map[status] || 'inactive'
 }
@@ -87,7 +85,7 @@ onMounted(() => fetchWarehouse())
         <h2>📦 Склад майна</h2>
         <span class="count-badge" v-if="pagination.total">Всього: {{ pagination.total }}</span>
       </div>
-      <button class="add-btn" @click="router.push({ name: 'warehouses.store' })">+ Додати майно</button>
+      <button class="add-btn" @click="router.push({ name: 'warehouse-create' })">+ Додати майно</button>
     </div>
 
     <div class="filters-bar">
@@ -110,8 +108,7 @@ onMounted(() => fetchWarehouse())
           <option value="">Всі статуси</option>
           <option value="in_stock">На складі</option>
           <option value="issued">Видано</option>
-          <option value="maintenance">Ремонт</option>
-          <option value="lost">Втрачено</option>
+          <option value="broken">Ремонт</option>
         </select>
       </div>
     </div>

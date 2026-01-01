@@ -23,7 +23,12 @@ class WarehouseUpdateRequest extends FormRequest
     {
         $warehouseId = $this->route('warehouse')->id;
         return [
-            'serial_number' => 'required|integer|min:1|unique:warehouses,serial_number' . $warehouseId,
+            'serial_number' => [
+                'required',
+                'string',
+                'unique:warehouses,serial_number' . $warehouseId . ',serial_number',
+                'regex:/^[a-z]{2}-\d{5}$/'
+            ],
             'equipment_type_id' => 'required|integer|exists:equipment_types,id',
             'status' => 'nullable|string|in:in_stock,issued,broken,lost',
         ];

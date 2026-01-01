@@ -12,6 +12,9 @@ class WarehouseService
     {
         $query = Warehouse::query()->with(['type']);
 
+        $query->when($request->search, function ($q, $search) {
+            $q->where('serial_number', 'like', "%{$search}%");
+        });
         $query->when($request->status, function ($q, $status) {
             $q->where('status', $status);
         });
@@ -25,7 +28,7 @@ class WarehouseService
             'warehouses' => $warehouse,
             'filters' => [
                 'types' => $types,
-                'statuses' => ['in_stock', 'issued', 'maintenance', 'lost'],
+                'statuses' => ['in_stock', 'issued', 'broken'],
             ],
         ];
     }
