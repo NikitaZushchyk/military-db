@@ -11,7 +11,7 @@ class WarehouseUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -26,11 +26,11 @@ class WarehouseUpdateRequest extends FormRequest
             'serial_number' => [
                 'required',
                 'string',
-                'unique:warehouses,serial_number' . $warehouseId . ',serial_number',
+                'unique:warehouses,serial_number,' . $warehouseId,
                 'regex:/^[a-z]{2}-\d{5}$/'
             ],
             'equipment_type_id' => 'required|integer|exists:equipment_types,id',
-            'status' => 'nullable|string|in:in_stock,issued,broken,lost',
+            'status' => 'nullable|string|in:in_stock,issued,broken',
         ];
     }
 }

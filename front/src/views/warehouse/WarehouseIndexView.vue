@@ -48,7 +48,7 @@ const handleSearch = () => {
 const applyFilter = () => fetchWarehouse(1)
 
 const goToDetail = (id) => {
-  router.push({name: 'warehouses.update', params: {warehouse: id}})
+  router.push({name: 'warehouse-detail', params: {warehouse: id}})
 }
 
 const changePage = (link) => {

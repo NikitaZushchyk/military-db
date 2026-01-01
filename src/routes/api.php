@@ -26,6 +26,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/', [WarehouseController::class, 'index'])->name('warehouses.index');
         Route::post('/', [WarehouseController::class, 'store'])->name('warehouses.store');
         Route::put('/{warehouse}', [WarehouseController::class, 'update'])->name('warehouses.update');
+        Route::get('/{warehouse}', [WarehouseController::class, 'show'])->name('warehouses.show');
+        Route::delete('/{warehouse}', [WarehouseController::class, 'destroy'])->name('warehouses.destroy');
     });
 
     Route::prefix('assignments')->group(function () {

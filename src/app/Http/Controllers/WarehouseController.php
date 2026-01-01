@@ -27,9 +27,20 @@ class WarehouseController extends Controller
         return new WarehouseResource($warehouse);
     }
 
-    public function update(WarehouseUpdateRequest $request,  Warehouse $warehouse)
+    public function update(WarehouseUpdateRequest $request, Warehouse $warehouse)
     {
         $updated_warehouse = $this->warehouseService->update($request->validated(), $warehouse);
         return new WarehouseResource($updated_warehouse);
+    }
+
+    public function show(Warehouse $warehouse)
+    {
+        return new WarehouseResource($warehouse->load('type'));
+    }
+
+    public function destroy(Warehouse $warehouse)
+    {
+        $warehouse->delete();
+        return response()->json(['message' => 'Deleted successfully']);
     }
 }
