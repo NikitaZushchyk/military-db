@@ -19,7 +19,7 @@ class AssignmentResource extends JsonResource
             'issue_date' => $this->issue_date,
             'return_date' => $this->return_date,
             'is_active' => is_null($this->return_date),
-
+            'soldier' => new SoldierResource($this->whenLoaded('soldier')),
             'item' => [
                 'id' => $this->item->id,
                 'serial_number' => $this->item->serial_number,

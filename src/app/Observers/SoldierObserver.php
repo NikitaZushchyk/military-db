@@ -11,6 +11,7 @@ class SoldierObserver
     {
         Cache::forget('stats');
     }
+
     public function deleted(Soldier $soldier): void
     {
         Cache::forget('stats');

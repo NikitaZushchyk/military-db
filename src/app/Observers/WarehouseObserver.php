@@ -12,7 +12,7 @@ class WarehouseObserver
      */
     public function created(Warehouse $warehouse): void
     {
-        if($warehouse->status != 'broken'){
+        if ($warehouse->status != 'broken') {
             Cache::forget('stats');
         }
     }
@@ -22,7 +22,7 @@ class WarehouseObserver
      */
     public function updated(Warehouse $warehouse): void
     {
-        if($warehouse->isDirty('status')){
+        if ($warehouse->isDirty('status')) {
             Cache::forget('stats');
         }
     }
@@ -32,7 +32,7 @@ class WarehouseObserver
      */
     public function deleted(Warehouse $warehouse): void
     {
-        if($warehouse->status != 'broken'){
+        if ($warehouse->status != 'broken') {
             Cache::forget('stats');
         }
     }

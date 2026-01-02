@@ -15,10 +15,6 @@ return new  class extends Migration {
         AFTER INSERT ON assignments
         FOR EACH ROW
         BEGIN
-            UPDATE warehouses
-            SET status = "issued"
-            WHERE id = NEW.warehouse_id;
-
             INSERT INTO logs (action, description, created_at)
             VALUES (
                 "WEAPON_ISSUED",
@@ -33,11 +29,6 @@ return new  class extends Migration {
             FOR EACH ROW
             BEGIN
                 IF OLD.return_date IS NULL AND NEW.return_date IS NOT NULL THEN
-
-                    UPDATE warehouses
-                    SET status = "in_stock"
-                    WHERE id = NEW.warehouse_id;
-
                     INSERT INTO logs (action, description, created_at)
                     VALUES (
                         "WEAPON_RETURNED",

@@ -8,6 +8,8 @@ import SoldiersCreateView from "@/views/soldiers/SoldiersCreateView.vue";
 import WarehouseIndexView from "@/views/warehouse/WarehouseIndexView.vue";
 import WarehouseCreateView from "@/views/warehouse/WarehouseCreateView.vue";
 import WarehouseDetailView from "@/views/warehouse/WarehouseDetailView.vue";
+import AssignmentsIndex from "@/views/Assignment/AssignmentsIndex.vue";
+import AssignmentCreate from "@/views/Assignment/AssignmentCreate.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +22,8 @@ const router = createRouter({
         {path: '/warehouse', name: 'warehouses.index', component: WarehouseIndexView},
         {path: '/warehouse/create', name: 'warehouse-create', component: WarehouseCreateView},
         {path: '/warehouse/:warehouse', name: 'warehouse-detail', component: WarehouseDetailView},
-        {path: '/assignments', component: HomeView},
+        {path: '/assignments', name: 'assignments.index', component: AssignmentsIndex},
+        {path: '/assignments/issue', name: 'assignments.create', component: AssignmentCreate},
         {path: '/duty', component: HomeView},
         {path: '/logs', component: HomeView},
     ]

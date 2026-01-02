@@ -3,11 +3,16 @@
 namespace App\Services;
 
 use App\Models\Assignment;
+use App\Models\Warehouse;
 
 class AssignmentService
 {
     public function issue(array $data): Assignment
     {
+        $item = Warehouse::findOrFail($data['warehouse_id']);
+
+        $item->update(['status' => 'issued']);
+
         return Assignment::create($data);
     }
 
@@ -20,6 +25,9 @@ class AssignmentService
         $assignment->update([
             'return_date' => now()
         ]);
+
+        $item = Warehouse::findOrFail($data['warehouse_id']);
+        $item->update(['status' => 'in_stock']);
 
         return $assignment;
     }

@@ -30,7 +30,8 @@ class SoldierService
             });
         });
 
-        $soldiers = $query->orderBy('last_name')->paginate(15);
+        $perPage = $request->has('all') ? 1000 : 15;
+        $soldiers = $query->orderBy('last_name')->paginate($perPage);
 
         $ranks = Rank::select('id', 'name')->get();
         $units = Unit::select('id', 'name')->get();

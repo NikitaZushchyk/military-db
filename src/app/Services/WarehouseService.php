@@ -22,7 +22,9 @@ class WarehouseService
             $q->where('equipment_type_id', $id);
         });
 
-        $warehouse = $query->orderBy('id', 'desc')->paginate(15);
+        $perPage = $request->has('all') ? 1000 : 15;
+        $warehouse = $query->orderBy('id', 'desc')->paginate($perPage);
+
         $types = EquipmentType::select('id', 'name')->get();
         return [
             'warehouses' => $warehouse,
