@@ -13,20 +13,23 @@ class SoldierService
     {
         $perPage = $request->has('all') ? 1000 : 15;
         $input = $request->input('search');
+        $searchQuery = '*';
 
-        if ($input) {
+        if ($input && trim($input) !== '') {
             $words = explode(' ', $input);
-
             $queryParts = [];
 
             foreach ($words as $word) {
                 if (trim($word) === '') continue;
-                $queryParts[] = "({$word}~1 OR *{$word}*)";
+
+                $escapedWord = addcslashes($word, '+-=&|><!(){}[]^"~*?:\\/');
+
+                $queryParts[] = "({$escapedWord}~1 OR *{$escapedWord}*)";
             }
 
-            $searchQuery = implode(' AND ', $queryParts);
-        } else {
-            $searchQuery = '*';
+            if (!empty($queryParts)) {
+                $searchQuery = implode(' AND ', $queryParts);
+            }
         }
 
         $scoutQuery = Soldier::search($searchQuery);
