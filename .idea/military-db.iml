@@ -122,6 +122,19 @@
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/voku/portable-ascii" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/laravel/sanctum" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/laravel/telescope" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/_laravel_idea" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/elastic/transport" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/elasticsearch/elasticsearch" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/handcraftedinthealps/elasticsearch-dsl" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/laravel/scout" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/matchish/laravel-scout-elasticsearch" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/open-telemetry/api" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/open-telemetry/context" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/php-http/discovery" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/php-http/httplug" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/php-http/promise" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/polyfill-php82" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/serializer" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -126,6 +126,19 @@
       <path value="$PROJECT_DIR$/src/vendor/theseer/tokenizer" />
       <path value="$PROJECT_DIR$/src/vendor/laravel/sanctum" />
       <path value="$PROJECT_DIR$/src/vendor/laravel/telescope" />
+      <path value="$PROJECT_DIR$/src/vendor/_laravel_idea" />
+      <path value="$PROJECT_DIR$/src/vendor/handcraftedinthealps/elasticsearch-dsl" />
+      <path value="$PROJECT_DIR$/src/vendor/elasticsearch/elasticsearch" />
+      <path value="$PROJECT_DIR$/src/vendor/php-http/httplug" />
+      <path value="$PROJECT_DIR$/src/vendor/php-http/promise" />
+      <path value="$PROJECT_DIR$/src/vendor/php-http/discovery" />
+      <path value="$PROJECT_DIR$/src/vendor/matchish/laravel-scout-elasticsearch" />
+      <path value="$PROJECT_DIR$/src/vendor/open-telemetry/api" />
+      <path value="$PROJECT_DIR$/src/vendor/open-telemetry/context" />
+      <path value="$PROJECT_DIR$/src/vendor/elastic/transport" />
+      <path value="$PROJECT_DIR$/src/vendor/laravel/scout" />
+      <path value="$PROJECT_DIR$/src/vendor/symfony/polyfill-php82" />
+      <path value="$PROJECT_DIR$/src/vendor/symfony/serializer" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
