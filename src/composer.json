@@ -12,7 +12,8 @@
         "laravel/scout": "^10.23",
         "laravel/telescope": "^5.16",
         "laravel/tinker": "^2.10.1",
-        "matchish/laravel-scout-elasticsearch": "^7.12"
+        "matchish/laravel-scout-elasticsearch": "^7.12",
+        "php-http/guzzle7-adapter": "^1.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

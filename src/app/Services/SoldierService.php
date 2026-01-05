@@ -11,27 +11,41 @@ class SoldierService
 {
     public function index(Request $request)
     {
-        $query = Soldier::query()->with(['rank', 'unit']);
-        $query->when($request->unit_id, function ($q) use ($request) {
-            $q->where('unit_id', $request->unit_id);
-        });
-
-        $query->when($request->rank_id, function ($q) use ($request) {
-            $q->where('rank_id', $request->rank_id);
-        });
-
-        $query->when($request->status, function ($q) use ($request) {
-            $q->where('status', $request->status);
-        });
-        $query->when($request->search, function ($q) use ($request) {
-            $q->where(function ($subQuery) use ($request) {
-                $subQuery->where('first_name', 'like', "%{$request->search}%")
-                    ->orWhere('last_name', 'like', "%{$request->search}%");
-            });
-        });
-
         $perPage = $request->has('all') ? 1000 : 15;
-        $soldiers = $query->orderBy('last_name')->paginate($perPage);
+        $input = $request->input('search');
+
+        if ($input) {
+            $words = explode(' ', $input);
+
+            $queryParts = [];
+
+            foreach ($words as $word) {
+                if (trim($word) === '') continue;
+                $queryParts[] = "({$word}~1 OR *{$word}*)";
+            }
+
+            $searchQuery = implode(' AND ', $queryParts);
+        } else {
+            $searchQuery = '*';
+        }
+
+        $scoutQuery = Soldier::search($searchQuery);
+
+        if ($request->unit_id) {
+            $scoutQuery->where('unit_id', $request->unit_id);
+        }
+        if ($request->rank_id) {
+            $scoutQuery->where('rank_id', $request->rank_id);
+        }
+        if ($request->status) {
+            $scoutQuery->where('status', strtolower($request->status));
+        }
+
+        $scoutQuery->query(function ($q) {
+            $q->with(['rank', 'unit'])->orderBy('last_name');
+        });
+
+        $soldiers = $scoutQuery->paginate($perPage);
 
         $ranks = Rank::select('id', 'name')->get();
         $units = Unit::select('id', 'name')->get();

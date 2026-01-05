@@ -131,6 +131,7 @@
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/open-telemetry/api" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/open-telemetry/context" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/php-http/discovery" />
+      <excludeFolder url="file://$MODULE_DIR$/src/vendor/php-http/guzzle7-adapter" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/php-http/httplug" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/php-http/promise" />
       <excludeFolder url="file://$MODULE_DIR$/src/vendor/symfony/polyfill-php82" />
