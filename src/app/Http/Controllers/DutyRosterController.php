@@ -16,7 +16,8 @@ class DutyRosterController extends Controller
     public function index(Request $request)
     {
         $duties = $this->service->index($request);
-        return DutyRosterResource::collection($duties);
+        return DutyRosterResource::collection($duties['data'])
+            ->additional(['meta_data' => $duties['meta_data']]);
     }
 
     public function store(DutyRosterStoreRequest $request)

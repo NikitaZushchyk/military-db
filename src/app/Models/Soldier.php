@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Soldier extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
     protected $fillable = ['first_name', 'last_name', 'rank_id', 'unit_id', 'status'];
 
     public function rank()
@@ -28,5 +29,16 @@ class Soldier extends Model
     public function duties()
     {
         return $this->hasMany(DutyRoster::class);
+    }
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
+            'status' => $this->status,
+            'rank_id' => $this->rank_id,
+            'unit_id' => $this->unit_id,
+        ];
     }
 }
