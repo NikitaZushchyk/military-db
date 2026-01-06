@@ -9,6 +9,7 @@ use Laravel\Scout\Searchable;
 class Soldier extends Model
 {
     use HasFactory, Searchable;
+
     protected $fillable = ['first_name', 'last_name', 'rank_id', 'unit_id', 'status'];
 
     public function rank()
@@ -30,6 +31,7 @@ class Soldier extends Model
     {
         return $this->hasMany(DutyRoster::class);
     }
+
     public function toSearchableArray()
     {
         return [

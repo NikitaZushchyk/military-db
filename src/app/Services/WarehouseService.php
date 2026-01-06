@@ -10,20 +10,45 @@ class WarehouseService
 {
     public function index(Request $request)
     {
-        $query = Warehouse::query()->with(['type']);
-
-        $query->when($request->search, function ($q, $search) {
-            $q->where('serial_number', 'like', "%{$search}%");
-        });
-        $query->when($request->status, function ($q, $status) {
-            $q->where('status', $status);
-        });
-        $query->when($request->type_id, function ($q, $id) {
-            $q->where('equipment_type_id', $id);
-        });
-
         $perPage = $request->has('all') ? 1000 : 15;
-        $warehouse = $query->orderBy('id', 'desc')->paginate($perPage);
+        $input = $request->input('search');
+
+        if ($input && trim($input) !== '') {
+            $words = explode(' ', $input);
+            $queryParts = [];
+
+            foreach ($words as $word) {
+                if (trim($word) === '') continue;
+
+                $escapedWord = addcslashes($word, '+-=&|><!(){}[]^"~*?:\\/');
+
+                $fuzziness = mb_strlen($word) >= 5 ? '~2' : '~1';
+
+                $queryParts[] = "({$escapedWord}{$fuzziness} OR *{$escapedWord}*)";
+            }
+
+            $searchQuery = implode(' AND ', $queryParts);
+        } else {
+            $searchQuery = '*';
+        }
+
+        $scoutQuery = Warehouse::search($searchQuery);
+
+        if ($request->status) {
+            $scoutQuery->where('status', $request->status);
+        }
+        if ($request->type_id) {
+            $scoutQuery->where('equipment_type_id', $request->type_id);
+        }
+
+        $scoutQuery->query(function ($q) use ($input) {
+            $q->with(['type']);
+            if (!$input) {
+                $q->orderBy('id', 'desc');
+            }
+        });
+
+        $warehouse = $scoutQuery->paginate($perPage);
 
         $types = EquipmentType::select('id', 'name')->get();
         return [

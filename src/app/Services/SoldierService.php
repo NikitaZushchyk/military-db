@@ -24,7 +24,7 @@ class SoldierService
 
                 $escapedWord = addcslashes($word, '+-=&|><!(){}[]^"~*?:\\/');
 
-                $queryParts[] = "({$escapedWord}~1 OR *{$escapedWord}*)";
+                $queryParts[] = "({$escapedWord}~2 OR *{$escapedWord}*)";
             }
 
             if (!empty($queryParts)) {
@@ -44,8 +44,11 @@ class SoldierService
             $scoutQuery->where('status', strtolower($request->status));
         }
 
-        $scoutQuery->query(function ($q) {
-            $q->with(['rank', 'unit'])->orderBy('last_name');
+        $scoutQuery->query(function ($q) use ($input) {
+            $q->with(['rank', 'unit']);
+            if (!$input) {
+                $q->orderBy('last_name');
+            }
         });
 
         $soldiers = $scoutQuery->paginate($perPage);
