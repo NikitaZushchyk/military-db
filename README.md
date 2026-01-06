@@ -33,9 +33,10 @@ This Military Database Management System is designed to streamline the administr
 - **PHP 8.2+** - Server-side language
 - **Laravel 12** - PHP framework
 - **Laravel Sanctum** - API authentication
+- **Laravel Scout** - Full-text search abstraction
 - **Laravel Telescope** - Debugging and monitoring
 - **MySQL 8.0** - Database
-- **Redis** - Caching and sessions
+- **Redis** - Caching, sessions, and queues
 
 ### Frontend
 - **Vue.js 3** - Progressive JavaScript framework
@@ -46,6 +47,7 @@ This Military Database Management System is designed to streamline the administr
 
 ### Infrastructure
 - **Docker & Docker Compose** - Containerization
+- **Elasticsearch** - Distributed search and analytics engine
 - **Nginx** - Web server
 - **Composer** - PHP dependency management
 - **Node.js & NPM** - JavaScript package management
@@ -55,13 +57,13 @@ This Military Database Management System is designed to streamline the administr
 ### 1. Personnel Management (Soldiers)
 - Create, read, update, and delete soldier records
 - Filter by unit, rank, and status
-- Search by name
+- **Advanced Search**: Fuzzy search with typo tolerance (powered by Elasticsearch) - finds soldiers even with misspelled names
 - View soldier details including assignments and duties
 - Track soldier status (active, hospital, vacation, fired)
 
 ### 2. Warehouse Management
 - Manage equipment inventory
-- Track equipment by serial number and type
+- **Smart Search**: Search equipment by serial number (supports partial matching via wildcards)
 - Monitor equipment status (in_stock, issued, broken)
 - Full CRUD operations for warehouse items
 
@@ -183,22 +185,33 @@ Before you begin, ensure you have the following installed:
    ```bash
    docker-compose exec app php artisan db:seed
    ```
-
-8. **Install frontend dependencies**
+   
+8. **Index data into Elasticsearch (Important!)**
+   ```bash
+   docker-compose exec app php artisan scout:import "App\Models\Soldier"
+   docker-compose exec app php artisan scout:import "App\Models\Warehouse"
+   ```
+   
+9. **Start the Queue Worker (for async indexing)**
+   ```bash
+   docker-compose exec app php artisan queue:work
+   ```
+   
+10. **Install frontend dependencies**
    ```bash
    cd front
    npm install
    cd ..
    ```
 
-9. **Build frontend assets**
+11. **Build frontend assets**
    ```bash
    cd front
    npm run build
    cd ..
    ```
 
-10. **Access the application**
+12. **Access the application**
     - Backend API: `http://localhost:8080`
     - Frontend (development): Run `cd front && npm run dev` (usually `http://localhost:5173`)
     - MySQL: `localhost:3306`
@@ -271,6 +284,11 @@ QUEUE_CONNECTION=redis
 REDIS_HOST=redis
 REDIS_PASSWORD=null
 REDIS_PORT=6379
+
+# Elasticsearch Configuration
+SCOUT_DRIVER=Matchish\ScoutElasticSearch\Engines\ElasticSearchEngine
+SCOUT_QUEUE=true
+ELASTICSEARCH_HOST=elasticsearch:9200
 
 # MailHog Configuration (for testing emails)
 MAIL_MAILER=smtp
