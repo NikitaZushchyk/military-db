@@ -42,6 +42,7 @@ services:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - military-net
     command: --default-authentication-plugin=mysql_native_password --log-bin-trust-function-creators=1
@@ -66,6 +67,35 @@ services:
       - "9200:9200"
     volumes:
       - elastic_data:/usr/share/elasticsearch/data
+    networks:
+      - military-net
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: military_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - military-net
+
+  service_logger:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        user: laravel
+        uid: 1000
+    image: military-logger-image
+    container_name: military_logger_app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./services/logger:/var/www
+    command: php artisan queue:work rabbitmq --tries=3
+    depends_on:
+      - rabbitmq
+      - db
     networks:
       - military-net
 
