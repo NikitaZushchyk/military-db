@@ -102,7 +102,7 @@ class SoldierTest extends TestCase
             ->postJson(route('soldiers.store'), $data);
 
         $response->assertStatus(422)
-        ->assertJsonValidationErrors(['first_name', 'last_name', 'rank_id', 'unit_id']);
+            ->assertJsonValidationErrors(['first_name', 'last_name', 'rank_id', 'unit_id']);
     }
 
     public function test_it_can_update_soldier()
