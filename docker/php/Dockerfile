@@ -29,7 +29,7 @@ RUN chown -R $user:$user /var/log
 RUN sed -i "s/user = www-data/user = $user/g" /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i "s/group = www-data/group = $user/g" /usr/local/etc/php-fpm.d/www.conf
 
-COPY docker/php/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/php/supervisord.conf /etc/supervisor/supervisord.conf
 COPY docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
