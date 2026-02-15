@@ -10,6 +10,8 @@ services:
     container_name: military_app
     restart: unless-stopped
     working_dir: /var/www
+    environment:
+      - SERVICE_ROLE=core
     volumes:
       - ./src:/var/www
     networks:
@@ -26,6 +28,18 @@ services:
       - ./docker/nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - app
+    networks:
+      - military-net
+
+  front:
+    image: node:20-alpine
+    container_name: military_front
+    working_dir: /var/www
+    volumes:
+      - ./front:/var/www
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host"
     networks:
       - military-net
 
@@ -90,9 +104,10 @@ services:
     container_name: military_logger_app
     restart: unless-stopped
     working_dir: /var/www
+    environment:
+      - SERVICE_ROLE=logger
     volumes:
       - ./services/logger:/var/www
-    command: php artisan queue:work rabbitmq --tries=3
     depends_on:
       - rabbitmq
       - db
