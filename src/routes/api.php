@@ -22,7 +22,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/', [SoldierController::class, 'store'])->name('soldiers.store');
     });
 
-    Route::prefix('        warehouse')->group(function () {
+    Route::prefix('     warehouse')->group(function () {
         Route::get('/', [WarehouseController::class, 'index'])->name('warehouses.index');
         Route::post('/', [WarehouseController::class, 'store'])->name('warehouses.store');
         Route::put('/{warehouse}', [WarehouseController::class, 'update'])->name('warehouses.update');

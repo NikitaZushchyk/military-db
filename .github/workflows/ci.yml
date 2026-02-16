@@ -8,6 +8,10 @@ jobs:
     permissions:
       contents: write
 
+    defaults:
+      run:
+        working-directory: ./src
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -31,10 +35,15 @@ jobs:
         with:
           commit_message: "style: auto-fix code style (PSR-12)"
           branch: ${{ github.head_ref }}
+          file_pattern: 'src/*'
 
   tests:
     runs-on: ubuntu-latest
     needs: pint
+
+    defaults:
+      run:
+        working-directory: ./src
 
     services:
       mysql:
