@@ -16,7 +16,9 @@ class RosterTest extends TestCase
     use RefreshDatabase;
 
     private $user;
+
     private $soldier;
+
     private $dutyType;
 
     protected function setUp(): void

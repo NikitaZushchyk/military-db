@@ -19,7 +19,7 @@ class WarehouseResource extends JsonResource
             'serial_number' => $this->serial_number,
             'equipment_type_id' => $this->equipment_type_id,
             'equipment_type_name' => $this->type?->name,
-            'status' => $this->status
+            'status' => $this->status,
         ];
     }
 }

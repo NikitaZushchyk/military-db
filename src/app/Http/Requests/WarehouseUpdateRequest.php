@@ -22,12 +22,13 @@ class WarehouseUpdateRequest extends FormRequest
     public function rules(): array
     {
         $warehouseId = $this->route('warehouse')->id;
+
         return [
             'serial_number' => [
                 'required',
                 'string',
-                'unique:warehouses,serial_number,' . $warehouseId,
-                'regex:/^[a-z]{2}-\d{5}$/'
+                'unique:warehouses,serial_number,'.$warehouseId,
+                'regex:/^[a-z]{2}-\d{5}$/',
             ],
             'equipment_type_id' => 'required|integer|exists:equipment_types,id',
             'status' => 'nullable|string|in:in_stock,issued,broken',

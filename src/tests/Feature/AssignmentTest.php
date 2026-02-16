@@ -17,7 +17,9 @@ class AssignmentTest extends TestCase
     use RefreshDatabase;
 
     private $user;
+
     private $soldier;
+
     private $warehouseItem;
 
     protected function setUp(): void
@@ -35,7 +37,7 @@ class AssignmentTest extends TestCase
         ]);
         $this->warehouseItem = Warehouse::factory()->create([
             'equipment_type_id' => $equipType->id,
-            'status' => 'in_stock'
+            'status' => 'in_stock',
         ]);
     }
 
@@ -114,7 +116,7 @@ class AssignmentTest extends TestCase
             'soldier_id' => $this->soldier->id,
             'warehouse_id' => $this->warehouseItem->id,
             'issue_date' => now(),
-            'return_date' => null
+            'return_date' => null,
         ]);
 
         $anotherItem = Warehouse::factory()->create(['equipment_type_id' => $this->warehouseItem->equipment_type_id]);
@@ -123,7 +125,7 @@ class AssignmentTest extends TestCase
             'soldier_id' => $this->soldier->id,
             'warehouse_id' => $anotherItem->id,
             'issue_date' => now()->subDays(2),
-            'return_date' => now()->subDay()
+            'return_date' => now()->subDay(),
         ]);
 
         $response = $this->actingAs($this->user)

@@ -26,7 +26,7 @@ class WarehouseStoreRequest extends FormRequest
                 'required',
                 'string',
                 'unique:warehouses,serial_number',
-                'regex:/^[a-z]{2}-\d{5}$/'
+                'regex:/^[a-z]{2}-\d{5}$/',
             ],
             'equipment_type_id' => 'required|integer|exists:equipment_types,id',
             'status' => 'nullable|string|in:in_stock,issued,broken',

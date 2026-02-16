@@ -13,6 +13,7 @@ class WarehouseTest extends TestCase
     use RefreshDatabase;
 
     private $user;
+
     private $type;
 
     protected function setUp(): void
@@ -27,7 +28,7 @@ class WarehouseTest extends TestCase
     public function test_it_can_list_warehouse_items()
     {
         Warehouse::factory()->count(3)->create([
-            'equipment_type_id' => $this->type->id
+            'equipment_type_id' => $this->type->id,
         ]);
 
         $response = $this->actingAs($this->user)
@@ -77,7 +78,7 @@ class WarehouseTest extends TestCase
 
         $this->assertDatabaseHas('warehouses', [
             'serial_number' => 'ak-12345',
-            'status' => 'in_stock'
+            'status' => 'in_stock',
         ]);
     }
 
@@ -98,14 +99,14 @@ class WarehouseTest extends TestCase
     {
         $item = Warehouse::factory()->create([
             'equipment_type_id' => $this->type->id,
-            'status' => 'in_stock'
+            'status' => 'in_stock',
         ]);
 
         $updateData = [
             'equipment_type_id' => $this->type->id,
             'status' => 'broken',
             'serial_number' => $item->serial_number,
-            'quantity' => 5
+            'quantity' => 5,
         ];
 
         $response = $this->actingAs($this->user)
@@ -115,7 +116,7 @@ class WarehouseTest extends TestCase
 
         $this->assertDatabaseHas('warehouses', [
             'id' => $item->id,
-            'status' => 'broken'
+            'status' => 'broken',
         ]);
     }
 
@@ -153,7 +154,7 @@ class WarehouseTest extends TestCase
 
         $item = Warehouse::factory()->create([
             'equipment_type_id' => $specialType->id,
-            'serial_number' => 'AK74-SPECIAL'
+            'serial_number' => 'AK74-SPECIAL',
         ]);
 
         $response = $this->actingAs($this->user)
@@ -169,7 +170,7 @@ class WarehouseTest extends TestCase
     {
         Warehouse::factory()->create([
             'equipment_type_id' => $this->type->id,
-            'serial_number' => 'SN-12345'
+            'serial_number' => 'SN-12345',
         ]);
 
         $response = $this->actingAs($this->user)

@@ -6,13 +6,13 @@ use App\Models\Soldier;
 use App\Models\Warehouse;
 use App\Observers\SoldierObserver;
 use App\Observers\WarehouseObserver;
+use Elastic\Elasticsearch\Client as ElasticsearchClient;
 use Elastic\Elasticsearch\ClientBuilder;
 use GuzzleHttp\Client;
-use Elastic\Elasticsearch\Client as ElasticsearchClient;
 use Illuminate\Support\ServiceProvider;
-use Psr\Http\Client\ClientInterface;
-use Matchish\ScoutElasticSearch\ElasticSearch\HitsIteratorAggregate;
 use Matchish\ScoutElasticSearch\ElasticSearch\EloquentHitsIteratorAggregate;
+use Matchish\ScoutElasticSearch\ElasticSearch\HitsIteratorAggregate;
+use Psr\Http\Client\ClientInterface;
 
 class AppServiceProvider extends ServiceProvider
 {

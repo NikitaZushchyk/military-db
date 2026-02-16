@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Log extends Model
 {
     protected $fillable = ['action', 'description', 'created_at'];
+
     public $timestamps = false;
 
     public static function boot()

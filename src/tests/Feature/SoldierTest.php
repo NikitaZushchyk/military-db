@@ -86,7 +86,7 @@ class SoldierTest extends TestCase
 
         $this->assertDatabaseHas('soldiers', [
             'last_name' => 'Shevchenko',
-            'status' => 'active'
+            'status' => 'active',
         ]);
     }
 
@@ -117,7 +117,7 @@ class SoldierTest extends TestCase
             'last_name' => $soldier->last_name,
             'rank_id' => $this->rank->id,
             'unit_id' => $this->unit->id,
-            'status' => 'active'
+            'status' => 'active',
         ];
 
         $response = $this->actingAs($this->user)

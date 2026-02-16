@@ -11,24 +11,32 @@ use App\Models\Soldier;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\Warehouse;
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Factories\Sequence;
+use Illuminate\Database\Seeder;
 
-class   DatabaseSeeder extends Seeder
+class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
         $ranks = ['Солдат', 'Старший солдат', 'Молодший сержант', 'Сержант', 'Головний сержант', 'Лейтенант', 'Капітан', 'Майор'];
-        foreach ($ranks as $rank) Rank::firstOrCreate(['name' => $rank]);
+        foreach ($ranks as $rank) {
+            Rank::firstOrCreate(['name' => $rank]);
+        }
 
         $units = ['1-ша рота', '2-га рота', 'Взвод забезпечення', 'Розвідвзвод', 'Штаб'];
-        foreach ($units as $unit) Unit::firstOrCreate(['name' => $unit]);
+        foreach ($units as $unit) {
+            Unit::firstOrCreate(['name' => $unit]);
+        }
 
         $weaponTypes = ['АК-74', 'ПМ', 'СВД', 'РПГ-7', 'Бронежилет Корсар', 'Шолом', 'Рація Motorola'];
-        foreach ($weaponTypes as $type) EquipmentType::firstOrCreate(['name' => $type]);
+        foreach ($weaponTypes as $type) {
+            EquipmentType::firstOrCreate(['name' => $type]);
+        }
 
         $duties = ['КПП', 'Патруль території', 'Черговий по роті', 'Кухня', 'Варта'];
-        foreach ($duties as $duty) DutyType::firstOrCreate(['name' => $duty]);
+        foreach ($duties as $duty) {
+            DutyType::firstOrCreate(['name' => $duty]);
+        }
 
         $soldiers = Soldier::factory(50)
             ->state(new Sequence(
@@ -39,8 +47,8 @@ class   DatabaseSeeder extends Seeder
                 ['status' => 'fired'],
             ))
             ->create([
-                'rank_id' => fn() => Rank::inRandomOrder()->first()->id,
-                'unit_id' => fn() => Unit::inRandomOrder()->first()->id,
+                'rank_id' => fn () => Rank::inRandomOrder()->first()->id,
+                'unit_id' => fn () => Unit::inRandomOrder()->first()->id,
             ]);
 
         $items = Warehouse::factory(100)
@@ -51,7 +59,7 @@ class   DatabaseSeeder extends Seeder
                 ['status' => 'broken'],
             ))
             ->create([
-                'equipment_type_id' => fn() => EquipmentType::inRandomOrder()->first()->id,
+                'equipment_type_id' => fn () => EquipmentType::inRandomOrder()->first()->id,
             ]);
 
         $activeSoldiers = $soldiers->where('status', 'active')->take(30)->values();
