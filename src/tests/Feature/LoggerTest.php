@@ -9,6 +9,9 @@ class LoggerTest extends TestCase
 {
     public function test_it_can_connect_to_real_logger_service()
     {
+        if (env('CI')) {
+            $this->markTestSkipped('Skipping real connection test in CI environment (no logger service available).');
+        }
         $url = config('services.logger.url').'/logs';
 
         $response = Http::timeout(3)->post($url, [
