@@ -3,13 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Models\Log;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class LogController extends Controller
 {
-    public function logs()
+    /**
+     * @throws ConnectionException
+     */
+    public function logs(Request $request)
     {
-        $logs = Log::orderBy('created_at', 'desc')->paginate(50);
+        $params = $request->all();
 
-        return response()->json($logs);
+        try {
+            $response = Http::timeout(3)->get(config('services.logger.url') . '/logs', $params);
+
+            if ($response->failed()) {
+                return response()->json(['error' => 'Logger service unavailable'], 503);
+            }
+
+            return response()->json($response->json());
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Connection refused'], 503);
+        }
     }
 }

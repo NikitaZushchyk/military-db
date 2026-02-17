@@ -9,6 +9,7 @@
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "matchish/laravel-scout-elasticsearch": "^7.12",
         "vladimir-yuldashev/laravel-queue-rabbitmq": "^14.4"
     },
     "require-dev": {

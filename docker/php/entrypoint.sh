@@ -34,6 +34,9 @@ elif [ "$SERVICE_ROLE" = "logger" ]; then
     echo "Running Migrations for Logger"
     php artisan migrate --force
 
+    echo "Importing Logs to Elasticsearch"
+    php artisan scout:import "App\Models\Log"
+
 else
     echo "Unknown role or no role set. Skipping specific tasks."
 fi

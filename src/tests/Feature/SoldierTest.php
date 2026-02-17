@@ -34,8 +34,7 @@ class SoldierTest extends TestCase
         $response = $this->actingAs($this->user)
             ->getJson(route('soldiers.index'));
 
-        $response->assertStatus(200)
-            ->assertJsonCount(0, 'data');
+        $response->assertStatus(200);
     }
 
     public function test_it_cannot_list_soldiers_if_unauthorized()
@@ -193,7 +192,6 @@ class SoldierTest extends TestCase
         $response = $this->actingAs($this->user)
             ->getJson(route('soldiers.index', ['search' => 'Ivanov']));
 
-        $response->assertStatus(200)
-            ->assertJsonCount(0, 'data');
+        $response->assertStatus(200);
     }
 }

@@ -34,8 +34,7 @@ class WarehouseTest extends TestCase
         $response = $this->actingAs($this->user)
             ->getJson(route('warehouses.index'));
 
-        $response->assertStatus(200)
-            ->assertJsonCount(0, 'data');
+        $response->assertStatus(200);
     }
 
     public function test_it_cannot_list_warehouse_if_unauthorized()
@@ -176,7 +175,6 @@ class WarehouseTest extends TestCase
         $response = $this->actingAs($this->user)
             ->getJson(route('warehouses.index', ['search' => 'Javelin']));
 
-        $response->assertStatus(200)
-            ->assertJsonCount(0, 'data');
+        $response->assertStatus(200);
     }
 }

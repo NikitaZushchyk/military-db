@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\LoggerClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,6 +19,7 @@ class LoginController extends Controller
         }
         $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
+        (new LoggerClient())->log('USER_LOGIN', "User {$user->email} logged in");
 
         return response()->json([
             'access_token' => $token,
