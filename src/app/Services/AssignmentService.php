@@ -23,7 +23,7 @@ class AssignmentService
             ->firstOrFail();
 
         $assignment->update([
-            'return_date' => now()
+            'return_date' => now(),
         ]);
 
         $item = Warehouse::findOrFail($data['warehouse_id']);
@@ -35,12 +35,14 @@ class AssignmentService
     public function index()
     {
         $assignments = Assignment::query()->with(['soldier', 'item.type'])->orderBy('id', 'desc')->paginate(15);
+
         return $assignments;
     }
 
     public function active()
     {
         $assignments = Assignment::query()->with(['soldier', 'item.type'])->whereNull('return_date')->orderBy('id', 'desc')->paginate(15);
+
         return $assignments;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\LoggerClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,11 +14,13 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-        if (!Auth::attempt($data)) {
+        if (! Auth::attempt($data)) {
             return response()->json(['message' => 'Невірний логін або пароль'], 401);
         }
         $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
+        (new LoggerClient)->log('USER_LOGIN', "User {$user->email} logged in");
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
@@ -28,6 +31,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
+
         return response()->json(['message' => 'Ви успішно вийшли']);
     }
 }

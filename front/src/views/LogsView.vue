@@ -7,11 +7,18 @@ const router = useRouter()
 const logs = ref([])
 const loading = ref(true)
 const pagination = ref({})
+const searchQuery = ref('')
 
 const fetchLogs = async (page = 1) => {
   loading.value = true
   try {
-    const response = await axios.get('http://localhost:8080/api/logs', {params: {page}})
+    const params = {page}
+
+    if (searchQuery.value) {
+      params.search = searchQuery.value
+    }
+
+    const response = await axios.get('http://localhost:8080/api/logs', {params})
 
     logs.value = response.data.data
     pagination.value = response.data
@@ -23,9 +30,14 @@ const fetchLogs = async (page = 1) => {
   }
 }
 
+const handleSearch = () => {
+  fetchLogs(1)
+}
+
 const changePage = (link) => {
   if (!link.url || link.active) return;
   const url = new URL(link.url);
+  const page = url.searchParams.get('page');
   fetchLogs(url.searchParams.get('page'));
 }
 
@@ -34,7 +46,8 @@ const getActionClass = (action) => {
     'WEAPON_ISSUED': 'issued',
     'WEAPON_RETURNED': 'returned',
     'SOLDIER_CREATED': 'created',
-    'SOLDIER_DELETED': 'deleted'
+    'SOLDIER_DELETED': 'deleted',
+    'USER_LOGIN': 'login'
   }
   return map[action] || 'default'
 }
@@ -54,7 +67,18 @@ onMounted(() => fetchLogs())
         <h2>⚠️ Системні логи</h2>
         <span class="count-badge" v-if="pagination.total">Всього записів: {{ pagination.total }}</span>
       </div>
-      <button class="refresh-btn" @click="fetchLogs(pagination.current_page)">🔄 Оновити</button>
+      <div class="search-block">
+        <div class="input-wrapper">
+          <input
+              v-model="searchQuery"
+              @keyup.enter="handleSearch"
+              type="text"
+              placeholder="Пошук (прізвище, серійник)..."
+          >
+          <button class="search-btn" @click="handleSearch">🔍</button>
+        </div>
+        <button class="refresh-btn" @click="fetchLogs(pagination.current_page)">🔄</button>
+      </div>
     </div>
 
     <div v-if="loading" class="loading-state">
@@ -122,6 +146,7 @@ onMounted(() => fetchLogs())
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 24px;
 }
 
@@ -129,6 +154,47 @@ onMounted(() => fetchLogs())
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.search-block {
+  display: flex;
+  gap: 10px;
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  padding: 8px 12px;
+  padding-right: 35px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+  width: 250px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.input-wrapper input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.search-btn {
+  position: absolute;
+  right: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 14px;
+}
+
+.search-btn:hover {
+  opacity: 1;
 }
 
 h2 {

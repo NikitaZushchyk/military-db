@@ -18,7 +18,9 @@ class WarehouseService
             $queryParts = [];
 
             foreach ($words as $word) {
-                if (trim($word) === '') continue;
+                if (trim($word) === '') {
+                    continue;
+                }
 
                 $escapedWord = addcslashes($word, '+-=&|><!(){}[]^"~*?:\\/');
 
@@ -43,7 +45,7 @@ class WarehouseService
 
         $scoutQuery->query(function ($q) use ($input) {
             $q->with(['type']);
-            if (!$input) {
+            if (! $input) {
                 $q->orderBy('id', 'desc');
             }
         });
@@ -51,6 +53,7 @@ class WarehouseService
         $warehouse = $scoutQuery->paginate($perPage);
 
         $types = EquipmentType::select('id', 'name')->get();
+
         return [
             'warehouses' => $warehouse,
             'filters' => [
@@ -68,6 +71,7 @@ class WarehouseService
     public function update(array $data, Warehouse $warehouse)
     {
         $warehouse->update($data);
+
         return $warehouse;
     }
 }

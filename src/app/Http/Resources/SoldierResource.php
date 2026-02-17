@@ -18,7 +18,7 @@ class SoldierResource extends JsonResource
             'id' => $this->id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
-            'full_name' => $this->last_name . ' ' . $this->first_name,
+            'full_name' => $this->last_name.' '.$this->first_name,
             'status' => $this->status,
 
             'rank' => $this->rank ? $this->rank->name : null,

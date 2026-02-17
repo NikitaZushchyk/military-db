@@ -10,6 +10,8 @@ services:
     container_name: military_app
     restart: unless-stopped
     working_dir: /var/www
+    environment:
+      - SERVICE_ROLE=core
     volumes:
       - ./src:/var/www
     networks:
@@ -23,9 +25,21 @@ services:
       - "8080:80"
     volumes:
       - ./src:/var/www
-      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - ./docker/nginx/conf.d/app.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - app
+    networks:
+      - military-net
+
+  front:
+    image: node:20-alpine
+    container_name: military_front
+    working_dir: /var/www
+    volumes:
+      - ./front:/var/www
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev -- --host"
     networks:
       - military-net
 
@@ -42,6 +56,7 @@ services:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
+      - ./docker/mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - military-net
     command: --default-authentication-plugin=mysql_native_password --log-bin-trust-function-creators=1
@@ -66,6 +81,50 @@ services:
       - "9200:9200"
     volumes:
       - elastic_data:/usr/share/elasticsearch/data
+    networks:
+      - military-net
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: military_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - military-net
+
+  service_logger:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        user: laravel
+        uid: 1000
+    image: military-logger-image
+    container_name: military_logger_app
+    restart: unless-stopped
+    working_dir: /var/www
+    environment:
+      - SERVICE_ROLE=logger
+    volumes:
+      - ./services/logger:/var/www
+    depends_on:
+      - rabbitmq
+      - db
+    networks:
+      - military-net
+
+  logger_web:
+    image: nginx:alpine
+    container_name: military_logger_web
+    restart: unless-stopped
+    ports:
+      - "8001:80"
+    volumes:
+      - ./services/logger:/var/www
+      - ./docker/nginx/conf.d/logger.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - service_logger
     networks:
       - military-net
 

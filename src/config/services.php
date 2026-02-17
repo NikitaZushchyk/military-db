@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'logger' => [
+        'url' => env('LOGGER_SERVICE_URL', 'http://military_logger_app/api'),
+    ],
+
 ];

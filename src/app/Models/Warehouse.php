@@ -26,7 +26,7 @@ class Warehouse extends Model
     {
         return [
             'id' => $this->id,
-            'serial_number' => (string)$this->serial_number,
+            'serial_number' => (string) $this->serial_number,
             'status' => $this->status,
             'equipment_type_id' => $this->equipment_type_id,
         ];

@@ -11,25 +11,26 @@ use Illuminate\Http\Request;
 
 class WarehouseController extends Controller
 {
-    public function __construct(private WarehouseService $warehouseService)
-    {
-    }
+    public function __construct(private WarehouseService $warehouseService) {}
 
     public function index(Request $request)
     {
         $warehouses = $this->warehouseService->index($request);
+
         return WarehouseResource::collection($warehouses['warehouses'])->additional(['meta_data' => $warehouses['filters']]);
     }
 
     public function store(WarehouseStoreRequest $request)
     {
         $warehouse = $this->warehouseService->store($request->validated());
+
         return new WarehouseResource($warehouse);
     }
 
     public function update(WarehouseUpdateRequest $request, Warehouse $warehouse)
     {
         $updated_warehouse = $this->warehouseService->update($request->validated(), $warehouse);
+
         return new WarehouseResource($updated_warehouse);
     }
 
@@ -41,6 +42,7 @@ class WarehouseController extends Controller
     public function destroy(Warehouse $warehouse)
     {
         $warehouse->delete();
+
         return response()->json(['message' => 'Deleted successfully']);
     }
 }

@@ -20,14 +20,16 @@ class SoldierService
             $queryParts = [];
 
             foreach ($words as $word) {
-                if (trim($word) === '') continue;
+                if (trim($word) === '') {
+                    continue;
+                }
 
                 $escapedWord = addcslashes($word, '+-=&|><!(){}[]^"~*?:\\/');
 
                 $queryParts[] = "({$escapedWord}~2 OR *{$escapedWord}*)";
             }
 
-            if (!empty($queryParts)) {
+            if (! empty($queryParts)) {
                 $searchQuery = implode(' AND ', $queryParts);
             }
         }
@@ -46,7 +48,7 @@ class SoldierService
 
         $scoutQuery->query(function ($q) use ($input) {
             $q->with(['rank', 'unit']);
-            if (!$input) {
+            if (! $input) {
                 $q->orderBy('last_name');
             }
         });
