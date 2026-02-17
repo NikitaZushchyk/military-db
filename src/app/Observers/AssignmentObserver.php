@@ -7,9 +7,7 @@ use App\Services\LoggerClient;
 
 class AssignmentObserver
 {
-    public function __construct(protected LoggerClient $logger)
-    {
-    }
+    public function __construct(protected LoggerClient $logger) {}
 
     public function created(Assignment $assignment): void
     {
@@ -28,7 +26,7 @@ class AssignmentObserver
     {
         if ($assignment->isDirty('return_date') &&
             is_null($assignment->getOriginal('return_date')) &&
-            !is_null($assignment->return_date)) {
+            ! is_null($assignment->return_date)) {
 
             $assignment->load(['soldier', 'item']);
 

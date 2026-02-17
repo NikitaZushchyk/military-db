@@ -15,6 +15,7 @@ class SendLogJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $tries = 3;
+
     public $timeout = 10;
 
     public function __construct(
@@ -28,19 +29,19 @@ class SendLogJob implements ShouldQueue
     {
         try {
             $response = Http::timeout(5)
-                ->post(config('services.logger.url') . '/logs', [
-                    'service'     => $this->service,
-                    'action'      => $this->action,
+                ->post(config('services.logger.url').'/logs', [
+                    'service' => $this->service,
+                    'action' => $this->action,
                     'description' => $this->description,
-                    'created_at'  => $this->timestamp,
+                    'created_at' => $this->timestamp,
                 ]);
 
             if ($response->failed()) {
-                throw new \Exception("Logger Service returned " . $response->status());
+                throw new \Exception('Logger Service returned '.$response->status());
             }
 
         } catch (\Exception $e) {
-            SystemLog::error("Failed to send log to service: " . $e->getMessage());
+            SystemLog::error('Failed to send log to service: '.$e->getMessage());
             $this->release(10);
         }
     }

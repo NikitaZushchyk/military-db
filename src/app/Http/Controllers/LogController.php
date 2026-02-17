@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Log;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -17,7 +16,7 @@ class LogController extends Controller
         $params = $request->all();
 
         try {
-            $response = Http::timeout(3)->get(config('services.logger.url') . '/logs', $params);
+            $response = Http::timeout(3)->get(config('services.logger.url').'/logs', $params);
 
             if ($response->failed()) {
                 return response()->json(['error' => 'Logger service unavailable'], 503);

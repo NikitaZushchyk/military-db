@@ -19,7 +19,7 @@ class LoginController extends Controller
         }
         $user = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
-        (new LoggerClient())->log('USER_LOGIN', "User {$user->email} logged in");
+        (new LoggerClient)->log('USER_LOGIN', "User {$user->email} logged in");
 
         return response()->json([
             'access_token' => $token,

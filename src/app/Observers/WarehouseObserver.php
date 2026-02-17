@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 class WarehouseObserver
 {
-    public function __construct(protected LoggerClient $logger)
-    {
-    }
+    public function __construct(protected LoggerClient $logger) {}
 
     /**
      * Handle the Warehouse "created" event.

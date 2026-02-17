@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Cache;
 
 class SoldierObserver
 {
-    public function __construct(protected LoggerClient $logger)
-    {
-    }
+    public function __construct(protected LoggerClient $logger) {}
 
     public function created(Soldier $soldier): void
     {
