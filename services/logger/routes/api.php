@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\LogController;
+use App\Http\Controllers\LoggerController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/logs', [LogController::class, 'store']);
+Route::post('/logs', [LoggerController::class, 'store']);
 
-Route::get('/logs', [LogController::class, 'index']);
+Route::get('/logs', [LoggerController::class, 'index']);
