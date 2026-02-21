@@ -14,32 +14,42 @@ while ! nc -z military_rabbitmq 5672; do
 done
 echo "RabbitMQ is ready!"
 
-if [ ! -d "vendor" ]; then
+if [ ! -d "vendor" ] && [ -f "composer.json" ]; then
   echo "Installing Composer dependencies"
-    composer install
+  composer install
 fi
 
-sudo chown -R laravel:laravel /var/www/storage /var/www/bootstrap/cache
-sudo chmod -R 775 /var/www/storage /var/www/bootstrap/cache
-
 if [ "$SERVICE_ROLE" = "core" ]; then
-    echo "Running Migrations & Seeds"
-    php artisan migrate:fresh --seed --force
+  sudo chown -R laravel:laravel /var/www/storage /var/www/bootstrap/cache
+  sudo chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+  echo "Running Migrations & Seeds"
+  php artisan migrate:fresh --seed --force
 
-    echo "Importing to Elasticsearch"
-    php artisan scout:import "App\Models\Soldier"
-    php artisan scout:import "App\Models\Warehouse"
+  echo "Importing to Elasticsearch"
+  php artisan scout:import "App\Models\Soldier"
+  php artisan scout:import "App\Models\Warehouse"
+
+  echo "Starting Supervisor"
+  exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
 elif [ "$SERVICE_ROLE" = "logger" ]; then
-    echo "Running Migrations for Logger"
-    php artisan migrate --force
+  sudo chown -R laravel:laravel /var/www/storage /var/www/bootstrap/cache
+  sudo chmod -R 775 /var/www/storage /var/www/bootstrap/cache
+  echo "Running Migrations for Logger"
+  php artisan migrate --force
 
-    echo "Importing Logs to Elasticsearch"
-    php artisan scout:import "App\Models\Log"
+  echo "Importing Logs to Elasticsearch"
+  php artisan scout:import "App\Models\Log"
+
+  echo "Starting Supervisor"
+  exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
+
+elif [ "$SERVICE_ROLE" = "symfony" ]; then
+  echo "Starting PHP-FPM for Symfony"
+  exec php-fpm
 
 else
     echo "Unknown role or no role set. Skipping specific tasks."
 fi
 
 echo "Starting Supervisor"
-exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
