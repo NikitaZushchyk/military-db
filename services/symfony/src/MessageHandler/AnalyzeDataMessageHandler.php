@@ -21,7 +21,6 @@ class AnalyzeDataMessageHandler
         $soldierId = $message->soldierId;
         $stats = $message->stats;
 
-        // *todo Add include a go microservice for hard work
         $healthScore = match ($stats['status']) {
             'active' => 100,
             'hospital' => 0,
