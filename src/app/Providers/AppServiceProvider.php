@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Assignment;
+use App\Models\DutyRoster;
 use App\Models\Soldier;
 use App\Models\Warehouse;
 use App\Observers\AssignmentObserver;
+use App\Observers\DutyRosterObserver;
 use App\Observers\SoldierObserver;
 use App\Observers\WarehouseObserver;
 use Elastic\Elasticsearch\Client as ElasticsearchClient;
@@ -46,5 +48,6 @@ class AppServiceProvider extends ServiceProvider
         Soldier::observe(SoldierObserver::class);
         Warehouse::observe(WarehouseObserver::class);
         Assignment::observe(AssignmentObserver::class);
+        DutyRoster::observe(DutyRosterObserver::class);
     }
 }

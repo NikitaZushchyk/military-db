@@ -13,6 +13,7 @@
         "laravel/telescope": "^5.16",
         "laravel/tinker": "^2.10.1",
         "matchish/laravel-scout-elasticsearch": "^7.12",
+        "php-amqplib/php-amqplib": "^3.7",
         "php-http/guzzle7-adapter": "^1.1",
         "vladimir-yuldashev/laravel-queue-rabbitmq": "^14.4"
     },

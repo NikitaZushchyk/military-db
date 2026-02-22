@@ -6,11 +6,11 @@ ARG uid
 RUN apt-get update && apt-get install -y \
     git curl libpng-dev libonig-dev libxml2-dev \
     zip unzip libzip-dev supervisor default-mysql-client \
-    netcat-openbsd procps sudo \
+    netcat-openbsd procps sudo librabbitmq-dev\
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip sockets
-RUN pecl install redis && docker-php-ext-enable redis
+RUN pecl install redis amqp && docker-php-ext-enable redis amqp
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -30,6 +30,7 @@ RUN sed -i "s/user = www-data/user = $user/g" /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i "s/group = www-data/group = $user/g" /usr/local/etc/php-fpm.d/www.conf
 
 COPY docker/php/supervisord.conf /etc/supervisor/supervisord.conf
+COPY docker/php/supervisord-symfony.conf /etc/supervisor/supervisord-symfony.conf
 COPY docker/php/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 

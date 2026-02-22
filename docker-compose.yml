@@ -83,7 +83,17 @@ services:
       - elastic_data:/usr/share/elasticsearch/data
     networks:
       - military-net
-
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.1
+    container_name: military_kibana
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - military-net
+    depends_on:
+      - elasticsearch
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: military_rabbitmq
@@ -125,6 +135,41 @@ services:
       - ./docker/nginx/conf.d/logger.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - service_logger
+    networks:
+      - military-net
+
+  service_symfony:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+      args:
+        user: laravel
+        uid: 1000
+    image: military-symfony-app
+    container_name: military_symfony_app
+    restart: unless-stopped
+    working_dir: /var/www
+    environment:
+      - SERVICE_ROLE=symfony
+    volumes:
+      - ./services/symfony:/var/www
+    depends_on:
+      - rabbitmq
+      - db
+    networks:
+      - military-net
+
+  symfony_web:
+    image: nginx:alpine
+    container_name: military_symfony_web
+    restart: unless-stopped
+    ports:
+      - "8002:80"
+    volumes:
+      - ./services/symfony:/var/www
+      - ./docker/nginx/conf.d/symfony.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - service_symfony
     networks:
       - military-net
 

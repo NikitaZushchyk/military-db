@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Jobs\SendAnalyzeJob;
 use App\Models\Assignment;
 use App\Services\LoggerClient;
 
@@ -38,5 +39,15 @@ class AssignmentObserver
                 "Soldier {$soldierName} returned Item {$itemSerial}"
             );
         }
+    }
+
+    public function deleted(Assignment $assignment): void
+    {
+        SendAnalyzeJob::dispatch($assignment->soldier->id);
+    }
+
+    public function saved(Assignment $assignment): void
+    {
+        SendAnalyzeJob::dispatch($assignment->soldier->id);
     }
 }
