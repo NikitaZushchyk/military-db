@@ -36,7 +36,7 @@ elif [ "$SERVICE_ROLE" = "logger" ]; then
   sudo chown -R laravel:laravel /var/www/storage /var/www/bootstrap/cache
   sudo chmod -R 775 /var/www/storage /var/www/bootstrap/cache
   echo "Running Migrations for Logger"
-  php artisan migrate --force
+  php artisan migrate:fresh --force
 
   echo "Importing Logs to Elasticsearch"
   php artisan scout:import "App\Models\Log"
@@ -53,8 +53,6 @@ elif [ "$SERVICE_ROLE" = "symfony" ]; then
 
   echo "Starting Supervisor for Symfony"
   exec /usr/bin/supervisord -c /etc/supervisor/supervisord-symfony.conf
-  echo "Starting PHP-FPM for Symfony"
-  exec php-fpm
 
 else
     echo "Unknown role or no role set. Skipping specific tasks."

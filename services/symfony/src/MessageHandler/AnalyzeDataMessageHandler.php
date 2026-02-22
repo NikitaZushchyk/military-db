@@ -22,11 +22,27 @@ class AnalyzeDataMessageHandler
         $stats = $message->stats;
 
         // *todo Add include a go microservice for hard work
-        $score = array_sum($stats) * 1.5;
+        $healthScore = match ($stats['status']) {
+            'active' => 100,
+            'hospital' => 0,
+            'vacation' => 80,
+            'fired' => 0,
+            default => 50,
+        };
+
+        $equipmentCompleteness = min(100, $stats['equipment_count'] * 33.3);
+
+        $rankMultiplier = 1.0 + ($stats['rank_id'] * 0.1);
+
+        $fatigue = exp(0.05 * $stats['duty_hours']);
+
+        $score = ($healthScore * ($equipmentCompleteness / 100)) * $rankMultiplier - $fatigue;
+
+        $finalScore = max(0, round($score, 2));
 
         $result = new AnalysisResult();
         $result->setSoldierId($soldierId);
-        $result->setCalculatedScore($score);
+        $result->setCalculatedScore($finalScore);
         $result->setCreatedAt(new \DateTimeImmutable());
 
         $this->entityManager->persist($result);
@@ -37,13 +53,13 @@ class AnalyzeDataMessageHandler
                 'index' => 'soldier_analytics',
                 'body'  => [
                     'soldier_id' => $soldierId,
-                    'score'      => $score,
+                    'score'      => $finalScore,
+                    'status'     => $stats['status'],
                     'timestamp'  => $result->getCreatedAt()->format('c')
                 ]
             ]);
-            echo "Успішно оброблено та збережено аналітику для солдата ID: $soldierId \n";
         } catch (\Exception $e) {
-            echo "Помилка відправки в Elasticsearch: " . $e->getMessage() . "\n";
+            echo "Elasticsearch Error: " . $e->getMessage() . "\n";
         }
     }
 }
