@@ -29,7 +29,7 @@ class SendAnalyzeJob implements ShouldQueue
     {
         $soldier = Soldier::with(['assignments', 'duties'])->find($this->soldierId);
 
-        if (!$soldier) {
+        if (! $soldier) {
             return;
         }
 
@@ -41,6 +41,7 @@ class SendAnalyzeJob implements ShouldQueue
             ->sum(function ($roster) {
                 $start = Carbon::parse($roster->start_time);
                 $end = $roster->end_time ? Carbon::parse($roster->end_time) : Carbon::now();
+
                 return $start->diffInHours($end);
             });
 
@@ -53,7 +54,7 @@ class SendAnalyzeJob implements ShouldQueue
 
         $body = json_encode([
             'soldierId' => $soldier->id,
-            'stats' => $stats
+            'stats' => $stats,
         ]);
 
         $rabbitConfig = config('queue.connections.rabbitmq.hosts.0');
@@ -72,7 +73,7 @@ class SendAnalyzeJob implements ShouldQueue
         $msg = new AMQPMessage($body, ['content_type' => 'application/json']);
 
         $headers = new AMQPTable([
-            'type' => 'App\Message\AnalyzeDataMessage'
+            'type' => 'App\Message\AnalyzeDataMessage',
         ]);
         $msg->set('application_headers', $headers);
 
