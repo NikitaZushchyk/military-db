@@ -45,6 +45,14 @@ elif [ "$SERVICE_ROLE" = "logger" ]; then
   exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
 elif [ "$SERVICE_ROLE" = "symfony" ]; then
+  sudo chown -R laravel:laravel /var/www/var
+  sudo chmod -R 775 /var/www/var
+
+  echo "Running Migrations for Symfony"
+  php bin/console doctrine:migrations:migrate --no-interaction
+
+  echo "Starting Supervisor for Symfony"
+  exec /usr/bin/supervisord -c /etc/supervisor/supervisord-symfony.conf
   echo "Starting PHP-FPM for Symfony"
   exec php-fpm
 
