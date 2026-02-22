@@ -173,6 +173,18 @@ services:
     networks:
       - military-net
 
+  service_go:
+    build:
+      context: .
+      dockerfile: docker/go/Dockerfile
+    image: military-go
+    container_name: military_go
+    restart: unless-stopped
+    ports:
+      - "50051:50051"
+    networks:
+      - military-net
+
 networks:
   military-net:
     driver: bridge

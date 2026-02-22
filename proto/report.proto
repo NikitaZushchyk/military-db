@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package pdfgenerator;
+
+service ReportService {
+  rpc GenerateTablePdf (UniversalTableRequest) returns (PdfResponse) {}
+}
+
+message UniversalTableRequest {
+  string title = 1;
+  repeated string headers = 2;
+  repeated TableRow rows = 3;
+}
+
+message TableRow {
+  repeated string cells = 1;
+}
+
+message PdfResponse {
+  bytes file_data = 1;
+}
