@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package pdfgenerator;
 
+option go_package = "./pb";
+
 service ReportService {
   rpc GenerateTablePdf (UniversalTableRequest) returns (PdfResponse) {}
 }
