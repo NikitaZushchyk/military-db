@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-use Pdfgenerator\ReportServiceClient;
-use Pdfgenerator\UniversalTableRequest;
-use Pdfgenerator\TableRow;
 use Grpc\ChannelCredentials;
 use Illuminate\Support\Facades\Log;
+use Pdfgenerator\ReportServiceClient;
+use Pdfgenerator\TableRow;
+use Pdfgenerator\UniversalTableRequest;
 
 class PdfExportService
 {
@@ -16,28 +16,28 @@ class PdfExportService
             'credentials' => ChannelCredentials::createInsecure(),
         ]);
 
-        $request = new UniversalTableRequest();
+        $request = new UniversalTableRequest;
         $request->setTitle($title);
 
         $request->setHeaders($headers);
 
         $tableRows = [];
         foreach ($rowsData as $rowData) {
-            $row = new TableRow();
+            $row = new TableRow;
             $row->setCells($rowData);
             $tableRows[] = $row;
         }
         $request->setRows($tableRows);
 
         /** @var \Pdfgenerator\PdfResponse $response */
-        list($response, $status) = $client->GenerateTablePdf($request)->wait();
+        [$response, $status] = $client->GenerateTablePdf($request)->wait();
 
         if ($status->code !== \Grpc\STATUS_OK) {
-            Log::error("gRPC Error generating PDF", [
+            Log::error('gRPC Error generating PDF', [
                 'code' => $status->code,
-                'details' => $status->details
+                'details' => $status->details,
             ]);
-            throw new \Exception("Не вдалося згенерувати PDF звіт. Помилка мікросервісу.");
+            throw new \Exception('Не вдалося згенерувати PDF звіт. Помилка мікросервісу.');
         }
 
         return $response->getFileData();
