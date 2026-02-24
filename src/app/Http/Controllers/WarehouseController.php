@@ -45,4 +45,12 @@ class WarehouseController extends Controller
 
         return response()->json(['message' => 'Deleted successfully']);
     }
+
+    public function pdfExport(Request $request){
+        $pdfBytes = $this->warehouseService->pdfExport($request);
+
+        return response($pdfBytes)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="warehouse_report.pdf"');
+    }
 }

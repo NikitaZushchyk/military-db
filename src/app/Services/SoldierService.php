@@ -109,8 +109,8 @@ class SoldierService
         foreach ($soldiers as $soldier) {
             $rowsData[] = [
                 $soldier->last_name.' '.$soldier->first_name,
-                $soldier->rank->name ?? 'Немає',
-                $soldier->unit->name ?? 'Немає',
+                $soldier->rank->name ?? 'Відсутнє',
+                $soldier->unit->name ?? 'Відсутнє',
                 $statusMap[$soldier->status] ?? ucfirst($soldier->status),
             ];
         }

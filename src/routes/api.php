@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::prefix('warehouse')->group(function () {
         Route::get('/', [WarehouseController::class, 'index'])->name('warehouses.index');
+        Route::get('/pdfExport', [WarehouseController::class, 'pdfExport'])->name('warehouses.pdfExport');
         Route::post('/', [WarehouseController::class, 'store'])->name('warehouses.store');
         Route::put('/{warehouse}', [WarehouseController::class, 'update'])->name('warehouses.update');
         Route::get('/{warehouse}', [WarehouseController::class, 'show'])->name('warehouses.show');

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 
 class WarehouseService
 {
+    public function __construct(private PdfExportService $pdfExportService) {}
+
     public function index(Request $request)
     {
         $perPage = $request->has('all') ? 1000 : 15;
@@ -73,5 +75,33 @@ class WarehouseService
         $warehouse->update($data);
 
         return $warehouse;
+    }
+
+    public function pdfExport(Request $request)
+    {
+        $request->merge(['all' => true]);
+        $data = $this->index($request);
+        $warehouses = $data['warehouses']->items();
+        $statusMap = [
+            'in_stock' => 'На складі',
+            'issued' => 'Видано',
+            'broken' => 'Ремонт',
+        ];
+        $rowsData = [];
+        foreach ($warehouses as $warehouse) {
+            $rowsData[] = [
+                $warehouse->serial_number,
+                $warehouse->type->name ?? 'Відсутнє',
+                $statusMap[$warehouse->status] ?? ucfirst($warehouse->status),
+            ];
+        }
+        $title = 'Склад майна';
+        $headers = [
+            'Серійний номер',
+            'Тип / Модель',
+            'Статус',
+        ];
+
+        return $this->pdfExportService->generate($title, $headers, $rowsData);
     }
 }
