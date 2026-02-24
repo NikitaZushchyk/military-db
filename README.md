@@ -237,7 +237,7 @@ That's it. Everything else runs inside Docker.
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone [<repository-url>](https://github.com/NikitaZushchyk/military-db)
    cd military-db
    ```
 
