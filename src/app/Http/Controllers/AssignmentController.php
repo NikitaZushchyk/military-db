@@ -40,7 +40,8 @@ class AssignmentController extends Controller
         return AssignmentResource::collection($assignments);
     }
 
-    public function pdfExport(Request $request){
+    public function pdfExport(Request $request)
+    {
         $pdfBytes = $this->assignmentService->pdfExport($request);
 
         return response($pdfBytes)

@@ -38,12 +38,14 @@ class AssignmentService
     public function index(Request $request)
     {
         $perPage = $request->has('all') ? 1000 : 15;
+
         return Assignment::query()->with(['soldier', 'item.type'])->orderBy('id', 'desc')->paginate($perPage);
     }
 
     public function active(Request $request)
     {
         $perPage = $request->has('all') ? 1000 : 15;
+
         return Assignment::query()->with(['soldier', 'item.type'])->whereNull('return_date')->orderBy('id', 'desc')->paginate($perPage);
     }
 
@@ -67,10 +69,10 @@ class AssignmentService
         $rowsData = [];
         foreach ($assignments as $assignment) {
             $rowsData[] = [
-                $assignment->soldier ? $assignment->soldier->last_name . ' ' . $assignment->soldier->first_name : 'Немає даних',
-                $assignment->item ? $assignment->item->name . ' (' . $assignment->item->serial_number . ')' : 'Немає даних',
+                $assignment->soldier ? $assignment->soldier->last_name.' '.$assignment->soldier->first_name : 'Немає даних',
+                $assignment->item ? $assignment->item->name.' ('.$assignment->item->serial_number.')' : 'Немає даних',
                 $assignment->issue_date,
-                $assignment->return_date ?? 'На руках'
+                $assignment->return_date ?? 'На руках',
             ];
         }
 
