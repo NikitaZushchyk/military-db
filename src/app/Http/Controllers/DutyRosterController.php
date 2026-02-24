@@ -25,4 +25,12 @@ class DutyRosterController extends Controller
 
         return new DutyRosterResource($dutyRoster);
     }
+
+    public function pdfExport(Request $request){
+        $pdfBytes = $this->service->pdfExport($request);
+
+        return response($pdfBytes)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="duties_report.pdf"');
+    }
 }

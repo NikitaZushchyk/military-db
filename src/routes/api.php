@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::get('/roster', [DutyRosterController::class, 'index'])->name('roster.index');
+    Route::get('/roster/pdfExport', [DutyRosterController::class, 'pdfExport'])->name('roster.pdfExport');
     Route::post('/roster', [DutyRosterController::class, 'store'])->name('roster.store');
 
     Route::get('/stats', [DashboardController::class, 'stats'])->name('stats');
