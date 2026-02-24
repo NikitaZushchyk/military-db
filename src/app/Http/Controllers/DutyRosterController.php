@@ -26,7 +26,8 @@ class DutyRosterController extends Controller
         return new DutyRosterResource($dutyRoster);
     }
 
-    public function pdfExport(Request $request){
+    public function pdfExport(Request $request)
+    {
         $pdfBytes = $this->service->pdfExport($request);
 
         return response($pdfBytes)

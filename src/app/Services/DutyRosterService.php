@@ -57,7 +57,7 @@ class DutyRosterService
                 $status = 'Завершено';
             }
             $rowsData[] = [
-                $duty->soldier ? $duty->soldier->last_name . ' ' . $duty->soldier->first_name : 'Відсутнє',
+                $duty->soldier ? $duty->soldier->last_name.' '.$duty->soldier->first_name : 'Відсутнє',
                 $duty->dutyType->name ?? 'Відсутнє',
                 $start->format('d.m.Y H:i'),
                 $end->format('d.m.Y H:i'),
