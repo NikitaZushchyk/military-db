@@ -9,6 +9,11 @@ RUN apt-get update && apt-get install -y \
     netcat-openbsd procps sudo librabbitmq-dev\
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y zlib1g-dev \
+    && pecl install grpc \
+    && pecl install protobuf \
+    && docker-php-ext-enable grpc protobuf
+
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip sockets
 RUN pecl install redis amqp && docker-php-ext-enable redis amqp
 

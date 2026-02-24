@@ -16,6 +16,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::prefix('soldiers')->group(function () {
         Route::get('/', [SoldierController::class, 'index'])->name('soldiers.index');
+        Route::get('/pdfExport', [SoldierController::class, 'pdfExport'])->name('soldiers.pdfExport');
         Route::get('/{soldier}', [SoldierController::class, 'show'])->name('soldiers.show');
         Route::put('/{soldier}', [SoldierController::class, 'update'])->name('soldiers.update');
         Route::delete('/{soldier}', [SoldierController::class, 'delete'])->name('soldiers.delete');
@@ -24,6 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::prefix('warehouse')->group(function () {
         Route::get('/', [WarehouseController::class, 'index'])->name('warehouses.index');
+        Route::get('/pdfExport', [WarehouseController::class, 'pdfExport'])->name('warehouses.pdfExport');
         Route::post('/', [WarehouseController::class, 'store'])->name('warehouses.store');
         Route::put('/{warehouse}', [WarehouseController::class, 'update'])->name('warehouses.update');
         Route::get('/{warehouse}', [WarehouseController::class, 'show'])->name('warehouses.show');
@@ -34,10 +36,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/issue', [AssignmentController::class, 'issue'])->name('assignments.issue');
         Route::post('/return', [AssignmentController::class, 'return'])->name('assignments.return');
         Route::get('/', [AssignmentController::class, 'index'])->name('assignments.index');
+        Route::get('/pdfExport', [AssignmentController::class, 'pdfExport'])->name('assignments.pdfExport');
         Route::get('/active', [AssignmentController::class, 'active'])->name('assignments.active');
     });
 
     Route::get('/roster', [DutyRosterController::class, 'index'])->name('roster.index');
+    Route::get('/roster/pdfExport', [DutyRosterController::class, 'pdfExport'])->name('roster.pdfExport');
     Route::post('/roster', [DutyRosterController::class, 'store'])->name('roster.store');
 
     Route::get('/stats', [DashboardController::class, 'stats'])->name('stats');

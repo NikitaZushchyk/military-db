@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 
 class SoldierService
 {
+    public function __construct(private PdfExportService $pdfExportService) {}
+
     public function index(Request $request)
     {
         $perPage = $request->has('all') ? 1000 : 15;
@@ -87,5 +89,39 @@ class SoldierService
     public function delete($soldier)
     {
         return $soldier->delete();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function pdfExport(Request $request)
+    {
+        $request->merge(['all' => true]);
+        $data = $this->index($request);
+        $soldiers = $data['paginator']->items();
+        $statusMap = [
+            'active' => 'В строю',
+            'hospital' => 'Шпиталь',
+            'vacation' => 'Відпустка',
+            'fired' => 'Звільнений',
+        ];
+        $rowsData = [];
+        foreach ($soldiers as $soldier) {
+            $rowsData[] = [
+                $soldier->last_name.' '.$soldier->first_name,
+                $soldier->rank->name ?? 'Відсутнє',
+                $soldier->unit->name ?? 'Відсутнє',
+                $statusMap[$soldier->status] ?? ucfirst($soldier->status),
+            ];
+        }
+        $title = 'Особовий склад';
+        $headers = [
+            'ПІБ',
+            'Звання',
+            'Підрозділ',
+            'Статус',
+        ];
+
+        return $this->pdfExportService->generate($title, $headers, $rowsData);
     }
 }

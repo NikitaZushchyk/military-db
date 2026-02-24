@@ -47,6 +47,32 @@ const handleSearch = () => {
 
 const applyFilter = () => fetchWarehouse(1)
 
+const exportPDF = async () => {
+  try {
+    const params = { ...filters.value }
+    Object.keys(params).forEach(key => (params[key] === '' || params[key] == null) && delete params[key]);
+
+    const response = await axios.get('http://localhost:8080/api/warehouse/pdfExport', {
+      params,
+      responseType: 'blob'
+    })
+
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', 'warehouse_report.pdf')
+
+    document.body.appendChild(link)
+    link.click()
+    link.parentNode.removeChild(link)
+    window.URL.revokeObjectURL(url)
+
+  } catch (error) {
+    console.error('Помилка при експорті PDF:', error)
+    alert('Не вдалося згенерувати PDF-звіт складу')
+  }
+}
+
 const goToDetail = (id) => {
   router.push({name: 'warehouse-detail', params: {warehouse: id}})
 }
@@ -85,7 +111,10 @@ onMounted(() => fetchWarehouse())
         <h2>📦 Склад майна</h2>
         <span class="count-badge" v-if="pagination.total">Всього: {{ pagination.total }}</span>
       </div>
-      <button class="add-btn" @click="router.push({ name: 'warehouse-create' })">+ Додати майно</button>
+      <div class="action-buttons">
+        <button class="export-btn" @click="exportPDF">📄 Експорт в PDF</button>
+        <button class="add-btn" @click="router.push({ name: 'warehouse-create' })">+ Додати майно</button>
+      </div>
     </div>
 
     <div class="filters-bar">
@@ -434,6 +463,29 @@ td {
   border-top-color: #3b82f6;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.export-btn {
+  background: white;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.export-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
 }
 
 @keyframes spin {

@@ -50,6 +50,31 @@ const changePage = (link) => {
   fetchAssignments(url.searchParams.get('page'));
 }
 
+const exportPDF = async () => {
+  try {
+    const params = { tab: activeTab.value }
+
+    const response = await axios.get('http://localhost:8080/api/assignments/pdfExport', {
+      params,
+      responseType: 'blob'
+    })
+
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = url
+    link.setAttribute('download', 'assignments_report.pdf')
+
+    document.body.appendChild(link)
+    link.click()
+    link.parentNode.removeChild(link)
+    window.URL.revokeObjectURL(url)
+
+  } catch (error) {
+    console.error('Помилка при експорті PDF:', error)
+    alert('Не вдалося згенерувати PDF-звіт')
+  }
+}
+
 watch(activeTab, () => {
   pagination.value = {}
   fetchAssignments(1)
@@ -64,7 +89,10 @@ onMounted(() => fetchAssignments())
       <div class="title-block">
         <h2>📋 Журнал видач</h2>
       </div>
-      <button class="add-btn" @click="router.push({ name: 'assignments.create' })">📤 Видати майно</button>
+      <div class="action-buttons">
+        <button class="export-btn" @click="exportPDF">📄 Експорт в PDF</button>
+        <button class="add-btn" @click="router.push({ name: 'assignments.create' })">📤 Видати майно</button>
+      </div>
     </div>
 
     <div class="tabs">
@@ -331,5 +359,28 @@ td {
   background: #3b82f6;
   color: white;
   border-color: #3b82f6;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.export-btn {
+  background: white;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.export-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
 }
 </style>
