@@ -77,6 +77,9 @@ class WarehouseService
         return $warehouse;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function pdfExport(Request $request)
     {
         $request->merge(['all' => true]);
