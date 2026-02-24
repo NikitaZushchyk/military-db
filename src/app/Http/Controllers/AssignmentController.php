@@ -6,14 +6,15 @@ use App\Http\Requests\AssignmentIssueRequest;
 use App\Http\Requests\AssignmentReturnRequest;
 use App\Http\Resources\AssignmentResource;
 use App\Services\AssignmentService;
+use Illuminate\Http\Request;
 
 class AssignmentController extends Controller
 {
     public function __construct(private AssignmentService $assignmentService) {}
 
-    public function index()
+    public function index(Request $request)
     {
-        $assignments = $this->assignmentService->index();
+        $assignments = $this->assignmentService->index($request);
 
         return AssignmentResource::collection($assignments);
     }
@@ -32,10 +33,18 @@ class AssignmentController extends Controller
         return new AssignmentResource($result);
     }
 
-    public function active()
+    public function active(Request $request)
     {
-        $assignments = $this->assignmentService->active();
+        $assignments = $this->assignmentService->active($request);
 
         return AssignmentResource::collection($assignments);
+    }
+
+    public function pdfExport(Request $request){
+        $pdfBytes = $this->assignmentService->pdfExport($request);
+
+        return response($pdfBytes)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="assignment_report.pdf"');
     }
 }

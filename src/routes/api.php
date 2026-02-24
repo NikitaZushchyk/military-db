@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/issue', [AssignmentController::class, 'issue'])->name('assignments.issue');
         Route::post('/return', [AssignmentController::class, 'return'])->name('assignments.return');
         Route::get('/', [AssignmentController::class, 'index'])->name('assignments.index');
+        Route::get('/pdfExport', [AssignmentController::class, 'pdfExport'])->name('assignments.pdfExport');
         Route::get('/active', [AssignmentController::class, 'active'])->name('assignments.active');
     });
 
