@@ -37,7 +37,7 @@ class PdfExportService
                 'code' => $status->code,
                 'details' => $status->details,
             ]);
-            throw new \Exception('Не вдалося згенерувати PDF звіт. Помилка мікросервісу.');
+            throw new \Exception('gRPC Error generating PDF.');
         }
 
         return $response->getFileData();

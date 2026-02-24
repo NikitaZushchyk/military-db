@@ -16,6 +16,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::prefix('soldiers')->group(function () {
         Route::get('/', [SoldierController::class, 'index'])->name('soldiers.index');
+        Route::get('/pdfExport', [SoldierController::class, 'pdfExport'])->name('soldiers.pdfExport');
         Route::get('/{soldier}', [SoldierController::class, 'show'])->name('soldiers.show');
         Route::put('/{soldier}', [SoldierController::class, 'update'])->name('soldiers.update');
         Route::delete('/{soldier}', [SoldierController::class, 'delete'])->name('soldiers.delete');

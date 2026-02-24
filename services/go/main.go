@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/johnfercher/maroto/pkg/color"
 	"github.com/johnfercher/maroto/pkg/consts"
 	"github.com/johnfercher/maroto/pkg/pdf"
 	"github.com/johnfercher/maroto/pkg/props"
-	"go-service/pb"
+	pb "go-service/pb"
 	"google.golang.org/grpc"
 	"log"
 	"net"
@@ -19,37 +20,65 @@ type PdfServer struct {
 func (s *PdfServer) GenerateTablePdf(ctx context.Context, req *pb.UniversalTableRequest) (*pb.PdfResponse, error) {
 	fmt.Printf("[INFO] Received request to generate report: %s\n", req.Title)
 
-	m := pdf.NewMaroto(consts.Portrait, consts.A4)
+	m := pdf.NewMaroto(consts.Landscape, consts.A4)
 
 	m.AddUTF8Font("Roboto", consts.Normal, "fonts/Roboto-Regular.ttf")
 	m.AddUTF8Font("Roboto", consts.Bold, "fonts/Roboto-Bold.ttf")
 	m.SetDefaultFontFamily("Roboto")
 
 	m.RegisterHeader(func() {
-		m.Row(20, func() {
+		m.Row(25, func() {
 			m.Col(12, func() {
 				m.Text(req.Title, props.Text{
-					Top:   5,
+					Top:   10,
 					Style: consts.Bold,
 					Align: consts.Center,
-					Size:  16,
+					Size:  18,
 				})
 			})
 		})
 	})
 
-	// Підготовка даних
 	var tableData [][]string
 	for _, row := range req.Rows {
 		tableData = append(tableData, row.Cells)
 	}
 
-	// Малюємо таблицю
+	cols := len(req.Headers)
+	var gridSizes []uint
+
+	if cols > 0 {
+		gridSizes = make([]uint, cols)
+		baseSize := uint(12 / cols)
+		remainder := uint(12 % cols)
+
+		for i := 0; i < cols; i++ {
+			gridSizes[i] = baseSize
+		}
+		gridSizes[0] += remainder
+	}
+
 	m.TableList(req.Headers, tableData, props.TableList{
 		HeaderProp: props.TableListContent{
-			Style: consts.Bold,
+			Style:     consts.Bold,
+			Size:      11,
+			GridSizes: gridSizes,
+		},
+		ContentProp: props.TableListContent{
+			Size:      10,
+			GridSizes: gridSizes,
 		},
 		Align: consts.Left,
+
+		HeaderContentSpace: 1,
+
+		Line: true,
+
+		AlternatedBackground: &color.Color{
+			Red:   245,
+			Green: 245,
+			Blue:  245,
+		},
 	})
 
 	buf, err := m.Output()
