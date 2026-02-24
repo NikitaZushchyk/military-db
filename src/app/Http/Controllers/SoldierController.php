@@ -47,8 +47,10 @@ class SoldierController extends Controller
         return response()->json(['message' => 'Солдат видалений']);
     }
 
-    public function pdfExport(Request $request){
+    public function pdfExport(Request $request)
+    {
         $pdfBytes = $this->soldierService->pdfExport($request);
+
         return response($pdfBytes)
             ->header('Content-Type', 'application/pdf')
             ->header('Content-Disposition', 'attachment; filename="soldiers_report.pdf"');

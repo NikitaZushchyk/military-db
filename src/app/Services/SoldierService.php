@@ -6,11 +6,10 @@ use App\Models\Rank;
 use App\Models\Soldier;
 use App\Models\Unit;
 use Illuminate\Http\Request;
-use App\Services\PdfExportService;
 
 class SoldierService
 {
-    public function __construct(private PdfExportService $pdfExportService){}
+    public function __construct(private PdfExportService $pdfExportService) {}
 
     public function index(Request $request)
     {
@@ -101,15 +100,15 @@ class SoldierService
         $data = $this->index($request);
         $soldiers = $data['paginator']->items();
         $statusMap = [
-            'active'   => 'В строю',
+            'active' => 'В строю',
             'hospital' => 'Шпиталь',
             'vacation' => 'Відпустка',
-            'fired'    => 'Звільнений'
+            'fired' => 'Звільнений',
         ];
         $rowsData = [];
         foreach ($soldiers as $soldier) {
             $rowsData[] = [
-                $soldier->last_name . ' ' . $soldier->first_name,
+                $soldier->last_name.' '.$soldier->first_name,
                 $soldier->rank->name ?? 'Немає',
                 $soldier->unit->name ?? 'Немає',
                 $statusMap[$soldier->status] ?? ucfirst($soldier->status),
@@ -122,6 +121,7 @@ class SoldierService
             'Підрозділ',
             'Статус',
         ];
+
         return $this->pdfExportService->generate($title, $headers, $rowsData);
     }
 }
